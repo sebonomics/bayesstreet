@@ -1,0 +1,79 @@
+{
+  "mode": "paper",
+  "startingCash": 500000,
+  "cash": 195999.46,
+  "positionSize": 100000,
+  "maxPositions": 5,
+  "realizedPnl": -4000.53,
+  "updatedAt": "2026-07-09T03:14:45",
+  "positions": [
+    {
+      "ticker": "BAC",
+      "entryDate": "2026-07-08",
+      "entryPrice": 58.3,
+      "shares": 1715.2658886559866,
+      "targetPrice": 61.21,
+      "stopPrice": 57.13,
+      "currentPrice": 58.3,
+      "unrealizedPnl": 0.0
+    },
+    {
+      "ticker": "JPM",
+      "entryDate": "2026-07-08",
+      "entryPrice": 330.62,
+      "shares": 302.46204548081016,
+      "targetPrice": 347.15,
+      "stopPrice": 324.01,
+      "currentPrice": 330.62,
+      "unrealizedPnl": 0.0
+    },
+    {
+      "ticker": "LLY",
+      "entryDate": "2026-07-08",
+      "entryPrice": 1215.83,
+      "shares": 82.2483436125356,
+      "targetPrice": 1276.62,
+      "stopPrice": 1191.51,
+      "currentPrice": 1215.83,
+      "unrealizedPnl": 0.0
+    }
+  ],
+  "trades": [
+    {
+      "ticker": "AAPL",
+      "entryDate": "2026-07-08",
+      "exitDate": "2026-07-08",
+      "entryPrice": 313.39,
+      "exitPrice": 307.12,
+      "shares": 319.0912,
+      "pnl": -2000.7,
+      "returnPct": -2.0,
+      "reason": "Stop"
+    },
+    {
+      "ticker": "CAT",
+      "entryDate": "2026-07-08",
+      "exitDate": "2026-07-08",
+      "entryPrice": 948.08,
+      "exitPrice": 929.12,
+      "shares": 105.4763,
+      "pnl": -1999.83,
+      "returnPct": -2.0,
+      "reason": "Stop"
+    }
+  ],
+  "skippedSignals": [],
+  "lastSignalDates": {
+    "AAPL": "2026-07-08",
+    "BAC": "2026-07-08",
+    "CAT": "2026-07-08",
+    "JPM": "2026-07-08",
+    "LLY": "2026-07-08",
+    "META": "2026-07-08",
+    "NOW": "2026-07-08",
+    "UNH": "2026-07-08",
+    "V": "2026-07-08"
+  },
+  "equity": 495999.47,
+  "totalPnl": -4000.53
+}
