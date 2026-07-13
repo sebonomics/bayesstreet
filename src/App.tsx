@@ -554,10 +554,6 @@ function App() {
           </div>
           <ReturnsLineChart />
         </div>
-        <p className="fine-print">
-          Model returns are cumulative and shown for illustration. Actual fund returns may differ
-          due to fees, execution, liquidity, and market conditions.
-        </p>
       </section>
 
       <section className="section monthly-returns-section home-panel-section" id="monthly-returns">
