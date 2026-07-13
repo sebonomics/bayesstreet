@@ -399,6 +399,7 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
 
 function App() {
   const [openNavMenu, setOpenNavMenu] = useState<string | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showAnnouncement, setShowAnnouncement] = useState(true)
   const [page, setPage] = useState<PageId>(() => getPageFromHash())
 
@@ -446,6 +447,17 @@ function App() {
             <span className="brand-word">BayesStreet</span>
           </a>
 
+          <button
+            aria-expanded={mobileMenuOpen}
+            aria-label="Toggle navigation"
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            type="button"
+          >
+            <span />
+            <span />
+          </button>
+
           <nav className="nav-links" aria-label="Primary navigation">
             {navLinks.map((menu) => (
               <div
@@ -485,6 +497,23 @@ function App() {
               Investor materials
             </a>
           </div>
+
+          {mobileMenuOpen ? (
+            <nav className="mobile-menu" aria-label="Mobile navigation">
+              {navLinks.map((menu) => (
+                <a href={menu.href} key={menu.label} onClick={() => setMobileMenuOpen(false)}>
+                  {menu.label}
+                </a>
+              ))}
+              <a
+                className="mobile-menu-cta"
+                href="#overview"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Investor Materials
+              </a>
+            </nav>
+          ) : null}
         </header>
 
         <main className="app-shell">
@@ -492,7 +521,9 @@ function App() {
             <>
       <section className="section home-hero" id="top">
         <div className="hero-intro">
-          <h1>In Pursuit Of The Best Returns.</h1>
+          <h1>
+            <span>Plan to Play,</span> <span>Play to Win</span>
+          </h1>
           <p>
             BayesStreet combines autonomous research agents, macro-driven security selection, and
             conviction-weighted capital allocation in liquid public markets.
