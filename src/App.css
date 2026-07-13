@@ -980,12 +980,22 @@
   margin: 0;
 }
 
-.section-heading span,
+.section-heading > span,
 .as-of {
   color: #111111;
   display: block;
   font-size: 13px;
   margin-top: 24px;
+}
+
+.section-heading p .as-of-inline,
+.summary-card .as-of-inline {
+  color: #555555;
+  display: inline;
+  font-size: 0.78em;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .return-tabs {

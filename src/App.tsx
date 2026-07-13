@@ -427,15 +427,14 @@ function App() {
         <div className="announcement">
           <span>
             BayesStreet is building an AI-native concentrated hedge fund.{' '}
-            <strong>Explore the playbook.</strong>
+            <a href="#overview">Explore the strategy →</a>
           </span>
-          <a href="#overview">Learn more -&gt;</a>
           <button
             aria-label="Dismiss announcement"
             onClick={() => setShowAnnouncement(false)}
             type="button"
           >
-            x
+            ×
           </button>
         </div>
       ) : null}
@@ -543,7 +542,6 @@ function App() {
             Model performance for the concentrated AI strategy, shown against the S&P 500 price
             index.
           </p>
-          <span>as of 06/29/2026</span>
         </div>
         <div className="section-component content-panel">
           <div className="return-tabs">
@@ -569,7 +567,6 @@ function App() {
             Recent monthly model returns for the BayesStreet AI strategy, shown as net percentage
             changes.
           </p>
-          <span className="as-of">as of 06/29/2026</span>
         </div>
         <div className="monthly-return-grid">
           {monthlyReturns.map(([month, value]) => (
@@ -589,7 +586,6 @@ function App() {
             macro-driven security selection, secular trend identification, and asymmetric
             positioning.
           </p>
-          <span className="as-of">as of 07/10/2026</span>
           <div className="overview-links">
             <a href="#process">Full Strategy Details ↗</a>
             <a href="#benchmark">Investor Materials ↗</a>
@@ -616,7 +612,6 @@ function App() {
             The portfolio is built around concentrated conviction plays, secular trend
             identification, special situations, and deep relative value in mega-cap names.
           </p>
-          <span className="as-of">as of 06/29/2026</span>
         </div>
         <div className="allocation-panel">
           <div className="sector-table">
@@ -671,12 +666,7 @@ function App() {
             <strong>+114.16%</strong>, reflecting a playbook of asymmetric positioning,
             opportunistic allocation, and conviction-weighted capital deployment.
           </p>
-          <span>as of 06/29/2026</span>
         </aside>
-        <p className="fine-print">
-          Performance data represents model research and assumed trading rules. It is not audited
-          fund performance.
-        </p>
       </section>
 
             </>

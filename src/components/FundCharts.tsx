@@ -197,7 +197,6 @@ export function HeroPerformanceChart() {
           <strong>{range.fundReturn}</strong>, meaning <strong>$10,000</strong> invested would be
           worth <strong>{range.value}</strong> today.
         </p>
-        <span>as of 06/29/2026</span>
       </aside>
     </div>
   )
