@@ -590,8 +590,32 @@
   border-top: 1px solid #eeeeee;
   display: flex;
   flex-direction: column;
+  height: clamp(640px, calc(100svh - 100px), 760px);
   justify-content: center;
-  min-height: clamp(640px, 78vh, 760px);
+  min-height: 0;
+  padding-bottom: clamp(36px, 5vh, 56px);
+  padding-top: clamp(36px, 5vh, 56px);
+}
+
+.app-shell > .overview-section:first-child {
+  border-top: 0;
+}
+
+@media (min-width: 901px) {
+  .home-panel-section .content-panel,
+  .home-panel-section .monthly-return-grid,
+  .home-panel-section .allocation-panel,
+  .home-panel-section.comparison-section .chart-card-shell {
+    margin-top: 24px;
+  }
+
+  .home-panel-section .sector-row {
+    min-height: 40px;
+  }
+
+  .home-panel-section.comparison-section .chart-frame {
+    height: 250px;
+  }
 }
 
 .section-component {
@@ -617,14 +641,17 @@
 .monthly-return-grid {
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 34px;
 }
 
 .monthly-return-card {
   background: var(--accent);
   color: #ffffff;
-  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
   min-width: 0;
   padding: clamp(14px, 1.4vw, 20px);
 }
@@ -645,7 +672,7 @@
   font-weight: 650;
   letter-spacing: -0.04em;
   line-height: 1;
-  margin-top: 70px;
+  margin-top: auto;
   white-space: nowrap;
 }
 
@@ -1597,6 +1624,7 @@
   }
 
   .home-panel-section {
+    height: auto;
     min-height: auto;
   }
 
@@ -1626,6 +1654,15 @@
     grid-row: auto;
   }
 
+  .overview-grid {
+    border-top: 1px solid #d8d8d8;
+    gap: 0;
+  }
+
+  .overview-table {
+    border-top: 0;
+  }
+
   .return-tabs {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1639,7 +1676,7 @@
   }
 
   .monthly-return-card strong {
-    margin-top: 42px;
+    margin-top: auto;
   }
 
   .process-row {
@@ -1833,7 +1870,7 @@
   }
 
   .monthly-return-card strong {
-    margin-top: 34px;
+    margin-top: auto;
   }
 
   .allocation-panel {

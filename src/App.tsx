@@ -2,19 +2,11 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import {
   AllocationDonutChart,
-  HeroPerformanceChart,
   ReturnsLineChart,
   WinRateBarChart,
 } from './components/FundCharts'
 
 type PageId = 'home' | 'strategy' | 'returns' | 'research' | 'risk' | 'company' | 'investors' | 'contact'
-
-const cumulativeTabs = [
-  { label: 'NET P&L', value: '+12.77%', active: true },
-  { label: 'POSITIVE MONTHS', value: '3 / 6' },
-  { label: 'BEST MONTH', value: '+12.23%' },
-  { label: 'WORST MONTH', value: '-5.04%' },
-]
 
 const monthlyReturns = [
   ['Jan', '+0.93%'],
@@ -69,11 +61,10 @@ const navLinks = [
   },
   {
     label: 'Returns',
-    href: '#returns',
+    href: '#monthly-returns',
     items: [
-      ['Returns', 'Complete six-month tested performance', '03', '#returns'],
-      ['Monthly Returns', 'Recent monthly return cards', '04', '#monthly-returns'],
-      ['Return Profile', 'Six-month compounded return context', '05', '#benchmark'],
+      ['Monthly Returns', 'Complete six-month tested performance', '03', '#monthly-returns'],
+      ['Return Profile', 'Six-month compounded return context', '04', '#benchmark'],
     ],
   },
   {
@@ -91,7 +82,7 @@ const footerColumns = [
     heading: 'Fund',
     links: [
       ['Overview', '#overview'],
-      ['Returns', '#returns'],
+      ['Monthly Returns', '#monthly-returns'],
       ['Allocation', '#allocation'],
     ],
   },
@@ -116,7 +107,7 @@ const footerColumns = [
     links: [
       ['About', '#overview'],
       ['Process', '#process'],
-      ['Returns', '#returns'],
+      ['Monthly Returns', '#monthly-returns'],
     ],
   },
 ]
@@ -437,7 +428,7 @@ function App() {
 
       <div className="site-shell">
         <header className="nav">
-          <a className="brand" href="#top" aria-label="BayesStreet home">
+          <a className="brand" href="#overview" aria-label="BayesStreet home">
             <img className="brand-logo" src="/bayesstreet-logo.png" alt="" />
             <span className="brand-word">BayesStreet</span>
           </a>
@@ -514,60 +505,6 @@ function App() {
         <main className="app-shell">
           {page === 'home' ? (
             <>
-      <section className="section home-hero" id="top">
-        <div className="hero-intro">
-          <h1>
-            <span>Plan to Play,</span> <span>Play to Win</span>
-          </h1>
-          <p>
-            BayesStreet combines autonomous research agents, macro-driven security selection, and
-            conviction-weighted capital allocation in liquid public markets.
-          </p>
-        </div>
-        <HeroPerformanceChart />
-        <div className="hero-links">
-          <a href="#overview">Explore Strategy ↗</a>
-          <a href="#benchmark">Investor Materials ↗</a>
-        </div>
-      </section>
-
-      <section className="section performance-section home-panel-section" id="returns">
-        <div className="section-heading">
-          <h1>Returns</h1>
-          <p>
-            The fund's first six monthly returns, shown as a compounded growth series.
-          </p>
-        </div>
-        <div className="section-component content-panel">
-          <div className="return-tabs">
-            {cumulativeTabs.map((tab) => (
-              <div className={tab.active ? 'return-tab active' : 'return-tab'} key={tab.label}>
-                <span>{tab.label}</span>
-                <strong>{tab.value}</strong>
-              </div>
-            ))}
-          </div>
-          <ReturnsLineChart />
-        </div>
-      </section>
-
-      <section className="section monthly-returns-section home-panel-section" id="monthly-returns">
-        <div className="section-heading">
-          <h2>Monthly Returns</h2>
-          <p>
-            The complete six-month tested return history for the BayesStreet strategy.
-          </p>
-        </div>
-        <div className="monthly-return-grid">
-          {monthlyReturns.map(([month, value]) => (
-            <article className="monthly-return-card" key={month}>
-              <span>{month}</span>
-              <strong>{value}</strong>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="section overview-section home-panel-section" id="overview">
         <div className="section-heading">
           <h1>Overview</h1>
@@ -591,6 +528,23 @@ function App() {
                 </div>
               ))}
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section monthly-returns-section home-panel-section" id="monthly-returns">
+        <div className="section-heading">
+          <h2>Monthly Returns</h2>
+          <p>
+            The complete six-month tested return history for the BayesStreet strategy.
+          </p>
+        </div>
+        <div className="monthly-return-grid">
+          {monthlyReturns.map(([month, value]) => (
+            <article className="monthly-return-card" key={month}>
+              <span>{month}</span>
+              <strong>{value}</strong>
+            </article>
           ))}
         </div>
       </section>
@@ -666,7 +620,7 @@ function App() {
       <footer className="site-footer">
         <div className="footer-grid">
           <div className="footer-primary">
-            <a className="brand footer-brand" href="#top">
+            <a className="brand footer-brand" href="#overview">
               <img className="brand-logo" src="/bayesstreet-logo.png" alt="" />
               <span className="brand-word">BayesStreet</span>
             </a>
