@@ -10,25 +10,19 @@ import {
 type PageId = 'home' | 'strategy' | 'returns' | 'research' | 'risk' | 'company' | 'investors' | 'contact'
 
 const cumulativeTabs = [
-  { label: '1 YEAR', value: '+33.98%' },
-  { label: '3 YEAR', value: '+102.67%' },
-  { label: '5 YEAR', value: '+114.16%' },
-  { label: '10 YEAR', value: '+634.60%', active: true },
+  { label: 'NET P&L', value: '+12.77%', active: true },
+  { label: 'POSITIVE MONTHS', value: '3 / 6' },
+  { label: 'BEST MONTH', value: '+12.23%' },
+  { label: 'WORST MONTH', value: '-5.04%' },
 ]
 
 const monthlyReturns = [
-  ['Jan', '+2.8%'],
-  ['Feb', '-1.1%'],
-  ['Mar', '+4.6%'],
-  ['Apr', '+3.2%'],
-  ['May', '+5.4%'],
-  ['Jun', '+2.9%'],
-  ['Jul', '+1.7%'],
-  ['Aug', '-0.8%'],
-  ['Sep', '+3.9%'],
-  ['Oct', '+4.1%'],
-  ['Nov', '+6.2%'],
-  ['Dec', '+3.0%'],
+  ['Jan', '+0.93%'],
+  ['Feb', '-5.04%'],
+  ['Mar', '-2.86%'],
+  ['Apr', '+12.23%'],
+  ['May', '+11.46%'],
+  ['Jun', '-3.17%'],
 ]
 
 const sectors = [
@@ -77,9 +71,9 @@ const navLinks = [
     label: 'Returns',
     href: '#returns',
     items: [
-      ['Returns', 'Model performance versus the S&P 500', '03', '#returns'],
+      ['Returns', 'Complete six-month tested performance', '03', '#returns'],
       ['Monthly Returns', 'Recent monthly return cards', '04', '#monthly-returns'],
-      ['Benchmark', 'Comparison and model return context', '05', '#benchmark'],
+      ['Return Profile', 'Six-month compounded return context', '05', '#benchmark'],
     ],
   },
   {
@@ -106,14 +100,14 @@ const footerColumns = [
     links: [
       ['Process', '#process'],
       ['Monthly Returns', '#monthly-returns'],
-      ['Benchmark', '#benchmark'],
+      ['Return Profile', '#benchmark'],
     ],
   },
   {
     heading: 'Investors',
     links: [
       ['Materials', '#overview'],
-      ['Benchmark', '#benchmark'],
+      ['Return Profile', '#benchmark'],
       ['Allocation', '#allocation'],
     ],
   },
@@ -170,20 +164,20 @@ const detailPages: Record<
   },
   returns: {
     eyebrow: 'Returns',
-    title: 'Model Returns And Benchmarks',
+    title: 'Six-Month Return History',
     subtitle:
-      'The strategy is evaluated against broad equity exposure and hedge fund composites, with emphasis on drawdown, upside capture, and repeatable sources of edge.',
+      'The complete tested history consists of six monthly returns, shown as a compounded growth series.',
     rows: [
-      ['1 Year', '+33.98%'],
-      ['3 Year', '+102.67%'],
-      ['5 Year', '+114.16%'],
-      ['10 Year', '+634.60%'],
+      ['Net P&L', '+12.77%'],
+      ['Tested History', '6 months'],
+      ['Best Month', '+12.23%'],
+      ['Worst Month', '-5.04%'],
     ],
     sections: [
       {
-        title: 'Benchmark-Aware, Not Benchmark-Hugging',
+        title: 'Measured On Compounded Results',
         body:
-          'The fund can look very different from an index when the macro setup and asymmetric risk/reward justify concentration.',
+          'Monthly gains and losses are compounded to show the actual change in portfolio value over the tested period.',
       },
       {
         title: 'Return Quality Matters',
@@ -323,10 +317,12 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
   const visualBars =
     page === 'returns'
       ? [
-          ['BayesStreet AI Fund', '78.55%', 78.55],
-          ['S&P 500 Index', '21.45%', 21.45],
-          ['Concentrated Strategy', '83.74%', 83.74],
-          ['Hedge Fund Composite', '16.26%', 16.26],
+          ['January', '+0.93%', 0.93],
+          ['February', '-5.04%', 5.04],
+          ['March', '-2.86%', 2.86],
+          ['April', '+12.23%', 12.23],
+          ['May', '+11.46%', 11.46],
+          ['June', '-3.17%', 3.17],
         ]
       : [
           ['Macro Signal', '72%', 72],
@@ -539,8 +535,7 @@ function App() {
         <div className="section-heading">
           <h1>Returns</h1>
           <p>
-            Model performance for the concentrated AI strategy, shown against the S&P 500 price
-            index.
+            The fund's first six monthly returns, shown as a compounded growth series.
           </p>
         </div>
         <div className="section-component content-panel">
@@ -560,8 +555,7 @@ function App() {
         <div className="section-heading">
           <h2>Monthly Returns</h2>
           <p>
-            Recent monthly model returns for the BayesStreet AI strategy, shown as net percentage
-            changes.
+            The complete six-month tested return history for the BayesStreet strategy.
           </p>
         </div>
         <div className="monthly-return-grid">
@@ -649,18 +643,16 @@ function App() {
 
       <section className="section comparison-section home-panel-section" id="benchmark">
         <div className="section-heading">
-          <h2>Benchmark Comparison</h2>
+          <h2>Six-Month Return Profile</h2>
           <p>
-            The strategy is designed to look different when the opportunity set supports
-            conviction-weighted concentration versus the S&P 500.
+            Compounded performance across the fund's complete tested history.
           </p>
         </div>
         <ReturnsLineChart />
         <aside className="summary-card">
           <p>
-            The 5-year model return for BayesStreet's concentrated AI strategy is{' '}
-            <strong>+114.16%</strong>, reflecting a playbook of asymmetric positioning,
-            opportunistic allocation, and conviction-weighted capital deployment.
+            The six reported monthly returns compound to a net P&amp;L of{' '}
+            <strong>+12.77%</strong>. A starting value of $100 finished at $112.77.
           </p>
         </aside>
       </section>
