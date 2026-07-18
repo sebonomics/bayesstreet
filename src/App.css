@@ -625,7 +625,8 @@
   background: var(--accent);
   color: #ffffff;
   min-height: 180px;
-  padding: 20px;
+  min-width: 0;
+  padding: clamp(14px, 1.4vw, 20px);
 }
 
 .monthly-return-card span {
@@ -640,11 +641,12 @@
 .monthly-return-card strong {
   color: #ffffff;
   display: block;
-  font-size: clamp(28px, 3.2vw, 42px);
+  font-size: clamp(22px, 2.4vw, 36px);
   font-weight: 650;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.04em;
   line-height: 1;
   margin-top: 70px;
+  white-space: nowrap;
 }
 
 .detail-hero {
