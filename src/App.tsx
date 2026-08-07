@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import {
-  AllocationDonutChart,
-  ReturnsLineChart,
-  WinRateBarChart,
-} from './components/FundCharts'
+import { WinRateBarChart } from './components/FundCharts'
 
 type PageId = 'home' | 'strategy' | 'returns' | 'research' | 'risk' | 'company' | 'investors' | 'contact'
 
@@ -15,24 +11,6 @@ const monthlyReturns = [
   ['Apr', '+12.23%'],
   ['May', '+11.46%'],
   ['Jun', '-3.17%'],
-]
-
-const sectors = [
-  { name: 'Concentrated AI Conviction', value: '38.51%', color: 'var(--accent)' },
-  { name: 'Mega-cap Dominance', value: '24.43%', color: '#e54b4b' },
-  { name: 'Deep Relative Value', value: '13.56%', color: '#5c0c12' },
-  { name: 'Special Situations', value: '8.46%', color: '#ff6b6b' },
-  { name: 'Secular Trend Leaders', value: '5.13%', color: '#8d1f2d' },
-  { name: 'Opportunistic Allocation', value: '4.04%', color: '#d99a9a' },
-  { name: 'Macro Hedges', value: '3.28%', color: '#641219' },
-  { name: 'Cash & Hedges', value: '1.14%', color: '#f0b7b7' },
-  { name: 'Other', value: '1.45%', color: '#a83a42' },
-]
-
-const processSteps = [
-  ['01', 'Identify Secular Trend', 'Find the big structural shift before it is fully priced.'],
-  ['02', 'Underwrite Asymmetry', 'Map upside, downside, liquidity, and thesis breakpoints.'],
-  ['03', 'Size By Conviction', 'Put the most capital behind the best risk/reward setups.'],
 ]
 
 const overviewColumns = [
@@ -51,30 +29,8 @@ const overviewColumns = [
 ]
 
 const navLinks = [
-  {
-    label: 'Fund',
-    href: '#overview',
-    items: [
-      ['Overview', 'Fund structure and strategy snapshot', '01', '#overview'],
-      ['Process', 'Macro view to concentrated expression', '02', '#process'],
-    ],
-  },
-  {
-    label: 'Returns',
-    href: '#monthly-returns',
-    items: [
-      ['Monthly Returns', 'Complete six-month tested performance', '03', '#monthly-returns'],
-      ['Return Profile', 'Six-month compounded return context', '04', '#benchmark'],
-    ],
-  },
-  {
-    label: 'Portfolio',
-    href: '#allocation',
-    items: [
-      ['Allocation', 'Theme and exposure breakdown', '06', '#allocation'],
-      ['Investor Materials', 'Strategy snapshot and positioning', '07', '#overview'],
-    ],
-  },
+  { label: 'Fund', href: '#overview' },
+  { label: 'Returns', href: '#monthly-returns' },
 ]
 
 const footerColumns = [
@@ -83,35 +39,11 @@ const footerColumns = [
     links: [
       ['Overview', '#overview'],
       ['Monthly Returns', '#monthly-returns'],
-      ['Allocation', '#allocation'],
-    ],
-  },
-  {
-    heading: 'Research',
-    links: [
-      ['Process', '#process'],
-      ['Monthly Returns', '#monthly-returns'],
-      ['Return Profile', '#benchmark'],
-    ],
-  },
-  {
-    heading: 'Investors',
-    links: [
-      ['Materials', '#overview'],
-      ['Return Profile', '#benchmark'],
-      ['Allocation', '#allocation'],
-    ],
-  },
-  {
-    heading: 'Company',
-    links: [
-      ['About', '#overview'],
-      ['Process', '#process'],
-      ['Monthly Returns', '#monthly-returns'],
     ],
   },
 ]
 
+// no destinations for these yet — rendered as plain text, not links
 const footerBottomLinks = ['Terms', 'Privacy', 'Disclosures']
 
 const detailPages: Record<
@@ -128,7 +60,7 @@ const detailPages: Record<
     eyebrow: 'Strategy',
     title: 'Concentrated Conviction Plays',
     subtitle:
-      'BayesStreet starts with a macro view, identifies secular shifts, then expresses the view through a small number of high-conviction liquid securities.',
+      'Formenos starts with a macro view, identifies secular shifts, then expresses the view through a small number of high-conviction liquid securities.',
     rows: [
       ['Core Style', 'Macro-driven security selection'],
       ['Positioning', 'Conviction-weighted, 10-30 core names'],
@@ -234,7 +166,7 @@ const detailPages: Record<
     eyebrow: 'Company',
     title: 'We Are An AI-Native Hedge Fund',
     subtitle:
-      'BayesStreet combines investing judgment with software, agents, and systematic risk controls to build a modern concentrated hedge fund.',
+      'Formenos combines investing judgment with software, agents, and systematic risk controls to build a modern concentrated hedge fund.',
     rows: [
       ['Built For', 'Public market alpha'],
       ['Approach', 'Macro view to concentrated stock picks'],
@@ -280,11 +212,11 @@ const detailPages: Record<
   },
   contact: {
     eyebrow: 'Contact',
-    title: 'Talk to BayesStreet',
+    title: 'Talk to Formenos',
     subtitle:
       'Request investor materials, ask about the strategy, or discuss whether the fund fits your mandate.',
     rows: [
-      ['Email', 'investors@bayesstreet.ai'],
+      ['Email', 'investors@formenos.ai'],
       ['Focus', 'AI-native concentrated hedge fund'],
       ['Investor Type', 'Qualified investors'],
       ['Materials', 'Available by request'],
@@ -385,7 +317,6 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
 }
 
 function App() {
-  const [openNavMenu, setOpenNavMenu] = useState<string | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showAnnouncement, setShowAnnouncement] = useState(true)
   const [page, setPage] = useState<PageId>(() => getPageFromHash())
@@ -412,10 +343,7 @@ function App() {
     <>
       {showAnnouncement ? (
         <div className="announcement">
-          <span>
-            BayesStreet is building an AI-native concentrated hedge fund.{' '}
-            <a href="#overview">Explore the strategy →</a>
-          </span>
+          <span>Formenos is building an AI-native concentrated hedge fund.</span>
           <button
             aria-label="Dismiss announcement"
             onClick={() => setShowAnnouncement(false)}
@@ -428,9 +356,8 @@ function App() {
 
       <div className="site-shell">
         <header className="nav">
-          <a className="brand" href="#overview" aria-label="BayesStreet home">
-            <img className="brand-logo" src="/bayesstreet-logo.png" alt="" />
-            <span className="brand-word">BayesStreet</span>
+          <a className="brand" href="#overview" aria-label="Formenos home">
+            <img className="brand-wordmark" src="/formenos-logo.png" alt="Formenos" />
           </a>
 
           <button
@@ -446,41 +373,17 @@ function App() {
 
           <nav className="nav-links" aria-label="Primary navigation">
             {navLinks.map((menu) => (
-              <div
-                className={openNavMenu === menu.label ? 'nav-item nav-item--open' : 'nav-item'}
-                key={menu.label}
-                onMouseEnter={() => setOpenNavMenu(menu.label)}
-                onMouseLeave={() => setOpenNavMenu(null)}
-              >
+              <div className="nav-item" key={menu.label}>
                 <a className="nav-trigger" href={menu.href}>
                   {menu.label}
                 </a>
-                <div className="dropdown">
-                  {menu.items.map(([title, description, icon, href], index) => (
-                    <a
-                      className={index === 0 ? 'active' : undefined}
-                      href={href}
-                      key={title}
-                      onClick={() => setOpenNavMenu(null)}
-                    >
-                      <span className="dropdown-icon">{icon}</span>
-                      <span className="dropdown-copy">
-                        <span className="dropdown-title">{title}</span>
-                        <span>{description}</span>
-                      </span>
-                    </a>
-                  ))}
-                </div>
               </div>
             ))}
           </nav>
 
           <div className="nav-actions">
-            <a className="button button-secondary" href="#allocation">
+            <a className="button button-secondary" href="#overview">
               Contact
-            </a>
-            <a className="button button-dark" href="#overview">
-              Investor materials
             </a>
           </div>
 
@@ -491,13 +394,6 @@ function App() {
                   {menu.label}
                 </a>
               ))}
-              <a
-                className="mobile-menu-cta"
-                href="#overview"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Investor Materials
-              </a>
             </nav>
           ) : null}
         </header>
@@ -507,15 +403,15 @@ function App() {
             <>
       <section className="section overview-section home-panel-section" id="overview">
         <div className="section-heading">
-          <h1>Overview</h1>
+          <h1>Fund Overview</h1>
           <p>
-            BayesStreet is an AI-native hedge fund pursuing concentrated conviction plays through
+            Formenos is an AI-native hedge fund pursuing concentrated conviction plays through
             macro-driven security selection, secular trend identification, and asymmetric
             positioning.
           </p>
           <div className="overview-links">
-            <a href="#process">Full Strategy Details ↗</a>
-            <a href="#benchmark">Investor Materials ↗</a>
+            <a href="#overview">Full Strategy Details ↗</a>
+            <a href="#monthly-returns">Investor Materials ↗</a>
           </div>
         </div>
         <div className="overview-grid content-panel">
@@ -536,7 +432,7 @@ function App() {
         <div className="section-heading">
           <h2>Monthly Returns</h2>
           <p>
-            The complete six-month tested return history for the BayesStreet strategy.
+            The complete six-month tested return history for the Formenos strategy.
           </p>
         </div>
         <div className="monthly-return-grid">
@@ -549,67 +445,6 @@ function App() {
         </div>
       </section>
 
-      <section className="section sector-section home-panel-section" id="allocation">
-        <div className="section-heading">
-          <h2>Portfolio Allocation</h2>
-          <p>
-            The portfolio is built around concentrated conviction plays, secular trend
-            identification, special situations, and deep relative value in mega-cap names.
-          </p>
-        </div>
-        <div className="allocation-panel">
-          <div className="sector-table">
-            <div className="sector-row sector-head">
-              <strong>Holdings</strong>
-              <strong>Allocation</strong>
-            </div>
-            {sectors.map((sector) => (
-              <div className="sector-row" key={sector.name}>
-                <span>
-                  <i style={{ background: sector.color }} />
-                  {sector.name}
-                </span>
-                <strong>{sector.value}</strong>
-              </div>
-            ))}
-          </div>
-          <div className="donut-wrap" aria-label="Portfolio allocation chart">
-            <AllocationDonutChart data={sectors} />
-          </div>
-        </div>
-      </section>
-
-      <section className="section process-section home-panel-section" id="process">
-        <div className="section-heading">
-          <h2>Process</h2>
-          <p>Macro view, AI research coverage, concentrated expression, and explicit risk limits.</p>
-        </div>
-        <div className="process-list content-panel">
-          {processSteps.map(([number, title, body]) => (
-            <article className="process-row" key={number}>
-              <span>{number}</span>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section comparison-section home-panel-section" id="benchmark">
-        <div className="section-heading">
-          <h2>Six-Month Return Profile</h2>
-          <p>
-            Compounded performance across the fund's complete tested history.
-          </p>
-        </div>
-        <ReturnsLineChart />
-        <aside className="summary-card">
-          <p>
-            The six reported monthly returns compound to a net P&amp;L of{' '}
-            <strong>+12.77%</strong>. A starting value of $100 finished at $112.77.
-          </p>
-        </aside>
-      </section>
 
             </>
           ) : (
@@ -621,8 +456,7 @@ function App() {
         <div className="footer-grid">
           <div className="footer-primary">
             <a className="brand footer-brand" href="#overview">
-              <img className="brand-logo" src="/bayesstreet-logo.png" alt="" />
-              <span className="brand-word">BayesStreet</span>
+              <img className="brand-wordmark" src="/formenos-logo-light.png" alt="Formenos" />
             </a>
             <p>
               AI-native concentrated hedge fund built around macro-driven security selection,
@@ -645,12 +479,10 @@ function App() {
         </div>
 
         <div className="footer-bottom">
-          <span>© 2026 BayesStreet Management LP</span>
+          <span>© 2026 Formenos Management LP</span>
           <div>
             {footerBottomLinks.map((link) => (
-              <a href="#benchmark" key={link}>
-                {link}
-              </a>
+              <span key={link}>{link}</span>
             ))}
           </div>
         </div>

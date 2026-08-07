@@ -40,6 +40,13 @@
 }
 
 .site-shell {
+  /* One source of truth for horizontal alignment. --shell-inset is the gap between the
+     viewport edge and the shell; --shell-gutter is the padding inside it. Header, sections
+     and the full-bleed footer all derive their left/right edge from these, so they line up
+     at every breakpoint. Overrides live in one ordered block at the end of this file. */
+  --shell-inset: max(20px, calc((100vw - min(1280px, 100vw - 40px)) / 2));
+  --shell-gutter: clamp(24px, 5vw, 56px);
+
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -55,7 +62,7 @@
   isolation: isolate;
   justify-content: space-between;
   min-height: 60px;
-  padding: 0 clamp(24px, 5vw, 56px);
+  padding: 0 var(--shell-gutter);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -88,6 +95,16 @@
   display: block;
   height: 30px;
   width: 30px;
+}
+
+.brand-wordmark {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+.footer-brand .brand-wordmark {
+  height: 22px;
 }
 
 .brand-word {
@@ -270,7 +287,7 @@
   border-bottom: 0;
   margin: 0 auto;
   max-width: 1280px;
-  padding: clamp(48px, 5.5vw, 72px) clamp(24px, 5vw, 56px);
+  padding: clamp(48px, 5.5vw, 72px) var(--shell-gutter);
   scroll-margin-top: 84px;
   width: 100%;
 }
@@ -1400,7 +1417,8 @@
   color: #ffffff;
   margin: 0 calc(50% - 50vw);
   margin-top: 0;
-  padding: 72px max(20px, calc((100vw - min(1280px, calc(100vw - 40px))) / 2)) 24px;
+  /* full-bleed band, but align inner content to the same edge as the nav and sections */
+  padding: 72px calc(var(--shell-inset) + var(--shell-gutter)) 24px;
 }
 
 .footer-grid {
@@ -1436,7 +1454,7 @@
 .footer-columns {
   display: grid;
   gap: 36px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(0, 200px));
 }
 
 .site-footer nav {
@@ -1483,7 +1501,8 @@
   gap: 18px;
 }
 
-.footer-bottom a {
+.footer-bottom a,
+.footer-bottom div span {
   color: rgba(255, 255, 255, 0.78);
   font-size: 0.78rem;
 }
@@ -1715,14 +1734,13 @@
 
 @media (max-width: 560px) {
   .section {
-    padding: 36px 18px;
+    padding-bottom: 36px;
+    padding-top: 36px;
   }
 
   .nav {
     grid-template-columns: 1fr auto;
     gap: 12px;
-    padding-left: 18px;
-    padding-right: 18px;
   }
 
   .brand {
@@ -1909,7 +1927,6 @@
     gap: 16px;
     justify-content: space-between;
     min-height: 64px;
-    padding: 0 20px;
     position: sticky;
     top: 0;
   }
@@ -2004,5 +2021,21 @@
 
   .brand-word {
     font-size: 1rem;
+  }
+}
+
+/* Horizontal alignment per breakpoint — kept together and last so the cascade is
+   unambiguous (there are duplicated max-width blocks earlier in this file). */
+@media (max-width: 900px) {
+  .site-shell {
+    --shell-inset: 0px;
+    --shell-gutter: 20px;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-shell {
+    --shell-inset: 0px;
+    --shell-gutter: 18px;
   }
 }

@@ -1,6 +1,6 @@
-# Bayesstreet
+# Formenos
 
-Bayesstreet is a hedge fund style stock analyzer. The current app is a React
+Formenos is a hedge fund style stock analyzer. The current app is a React
 and TypeScript front end with a static dashboard shell for watchlists, stock
 signals, and factor scoring.
 

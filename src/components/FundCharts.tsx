@@ -50,7 +50,7 @@ export function HeroPerformanceChart() {
       <div className="hero-chart-main">
         <div className="hero-chart-metrics">
           <div>
-            <span className="legend-dot fund-dot">BayesStreet AI Fund</span>
+            <span className="legend-dot fund-dot">Formenos AI Fund</span>
             <strong>+12.77%</strong>
           </div>
           <div>
@@ -77,7 +77,7 @@ export function HeroPerformanceChart() {
               <Tooltip
                 formatter={(value, name) => [
                   `$${Number(value).toFixed(2)}`,
-                  name === 'fund' ? 'BayesStreet AI Fund' : 'S&P 500',
+                  name === 'fund' ? 'Formenos AI Fund' : 'S&P 500',
                 ]}
                 contentStyle={{
                   border: '1px solid #e5e5e5',
@@ -99,7 +99,7 @@ export function HeroPerformanceChart() {
 
       <aside className="hero-return-card">
         <p>
-          Across its first six tested months, BayesStreet compounded to{' '}
+          Across its first six tested months, Formenos compounded to{' '}
           <strong>+12.77%</strong> versus <strong>+9.55%</strong> for the S&amp;P 500, an
           outperformance of <strong>3.22 percentage points</strong>.
         </p>
@@ -131,7 +131,7 @@ export function ReturnsLineChart() {
               <Line
                 dataKey="fund"
                 dot={false}
-                name="BayesStreet AI Fund"
+                name="Formenos AI Fund"
                 stroke={red}
                 strokeWidth={3}
                 type="monotone"
