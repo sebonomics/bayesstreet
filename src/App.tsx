@@ -28,20 +28,30 @@ const overviewColumns = [
   ],
 ]
 
-const navLinks = [
-  { label: 'Fund', href: '#overview' },
-  { label: 'Returns', href: '#monthly-returns' },
-]
+// Temporarily showing only the manifesto (plus header and footer). Flip to true to bring
+// back the fund-facts rail, the Monthly Returns section, and the nav/footer links to them.
+const SHOW_FULL_SITE = false
 
-const footerColumns = [
-  {
-    heading: 'Fund',
-    links: [
-      ['Overview', '#overview'],
-      ['Monthly Returns', '#monthly-returns'],
-    ],
-  },
-]
+const CONTACT_EMAIL = 'sebastian@formenos.ai'
+
+const navLinks = SHOW_FULL_SITE
+  ? [
+      { label: 'Fund', href: '#overview' },
+      { label: 'Returns', href: '#monthly-returns' },
+    ]
+  : []
+
+const footerColumns = SHOW_FULL_SITE
+  ? [
+      {
+        heading: 'Fund',
+        links: [
+          ['Overview', '#overview'],
+          ['Monthly Returns', '#monthly-returns'],
+        ],
+      },
+    ]
+  : []
 
 // no destinations for these yet — rendered as plain text, not links
 const footerBottomLinks = ['Terms', 'Privacy', 'Disclosures']
@@ -343,7 +353,7 @@ function App() {
     <>
       {showAnnouncement ? (
         <div className="announcement">
-          <span>Formenos is building an AI-native concentrated hedge fund.</span>
+          <span>Formenos is building the AI-Native Hedge Fund</span>
           <button
             aria-label="Dismiss announcement"
             onClick={() => setShowAnnouncement(false)}
@@ -360,34 +370,38 @@ function App() {
             <img className="brand-wordmark" src="/formenos-logo.png" alt="Formenos" />
           </a>
 
-          <button
-            aria-expanded={mobileMenuOpen}
-            aria-label="Toggle navigation"
-            className="mobile-menu-toggle"
-            onClick={() => setMobileMenuOpen((open) => !open)}
-            type="button"
-          >
-            <span />
-            <span />
-          </button>
+          {navLinks.length > 0 ? (
+            <button
+              aria-expanded={mobileMenuOpen}
+              aria-label="Toggle navigation"
+              className="mobile-menu-toggle"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              type="button"
+            >
+              <span />
+              <span />
+            </button>
+          ) : null}
 
-          <nav className="nav-links" aria-label="Primary navigation">
-            {navLinks.map((menu) => (
-              <div className="nav-item" key={menu.label}>
-                <a className="nav-trigger" href={menu.href}>
-                  {menu.label}
-                </a>
-              </div>
-            ))}
-          </nav>
+          {navLinks.length > 0 ? (
+            <nav className="nav-links" aria-label="Primary navigation">
+              {navLinks.map((menu) => (
+                <div className="nav-item" key={menu.label}>
+                  <a className="nav-trigger" href={menu.href}>
+                    {menu.label}
+                  </a>
+                </div>
+              ))}
+            </nav>
+          ) : null}
 
           <div className="nav-actions">
-            <a className="button button-secondary" href="#overview">
+            <a className="button button-secondary" href={`mailto:${CONTACT_EMAIL}`}>
               Contact
             </a>
           </div>
 
-          {mobileMenuOpen ? (
+          {mobileMenuOpen && navLinks.length > 0 ? (
             <nav className="mobile-menu" aria-label="Mobile navigation">
               {navLinks.map((menu) => (
                 <a href={menu.href} key={menu.label} onClick={() => setMobileMenuOpen(false)}>
@@ -401,49 +415,79 @@ function App() {
         <main className="app-shell">
           {page === 'home' ? (
             <>
-      <section className="section overview-section home-panel-section" id="overview">
-        <div className="section-heading">
-          <h1>Fund Overview</h1>
+      <section
+        className={
+          SHOW_FULL_SITE
+            ? 'section manifesto-section'
+            : 'section manifesto-section manifesto-section--solo'
+        }
+        id="overview"
+      >
+        <article className="manifesto">
+        <div className="manifesto-head">
+          <span className="manifesto-eyebrow">Manifesto</span>
+          <h1>Formenos is the hedge fund run like a technology company.</h1>
+        </div>
+
+        <div className="manifesto-prose">
           <p>
-            Formenos is an AI-native hedge fund pursuing concentrated conviction plays through
-            macro-driven security selection, secular trend identification, and asymmetric
-            positioning.
+            Many funds like Millennium, Point72, and Balyasny have an egregious headcount
+            that is disproportionate to the assets that they manage.
           </p>
-          <div className="overview-links">
-            <a href="#overview">Full Strategy Details ↗</a>
-            <a href="#monthly-returns">Investor Materials ↗</a>
+          <p>
+            Our goal is to be the most lean and successful investment firm ever, so we build
+            internal tooling to run our shop like a high-growth tech company.
+          </p>
+          <p>
+            AI-Native means that we harness AI to replace the role of analysts and researchers.
+            It does not mean we use AI to make decisions.
+          </p>
+          <p>
+            We trade multiple strategies, all on public equities, across many sectors. Our goal
+            is to provide the highest returns possible, while keeping those returns consistent
+            and hedged.
+          </p>
+          <p>
+            We raised our last round of venture financing at a $25M valuation from the first
+            investors in Cursor, Cognition, Etched, and angels from DoorDash and Kalshi.
+          </p>
+          <p>
+            Since then, we have outperformed leading funds like those mentioned above. We
+            started in April, and our annualized returns since then are ~70%.
+          </p>
           </div>
-        </div>
-        <div className="overview-grid content-panel">
-          {overviewColumns.map((column) => (
-            <div className="overview-table" key={column[0][0]}>
-              {column.map(([label, value]) => (
-                <div className="overview-row" key={label}>
-                  <span>{label}</span>
-                  <strong>{value}</strong>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
+        </article>
+
+        {SHOW_FULL_SITE ? (
+          <aside className="manifesto-facts" aria-label="Fund facts">
+            {overviewColumns.flat().map(([label, value]) => (
+              <div className="fact-row" key={label}>
+                <span>{label}</span>
+                <strong>{value}</strong>
+              </div>
+            ))}
+          </aside>
+        ) : null}
       </section>
 
-      <section className="section monthly-returns-section home-panel-section" id="monthly-returns">
-        <div className="section-heading">
-          <h2>Monthly Returns</h2>
-          <p>
-            The complete six-month tested return history for the Formenos strategy.
-          </p>
-        </div>
-        <div className="monthly-return-grid">
-          {monthlyReturns.map(([month, value]) => (
-            <article className="monthly-return-card" key={month}>
-              <span>{month}</span>
-              <strong>{value}</strong>
-            </article>
-          ))}
-        </div>
-      </section>
+      {SHOW_FULL_SITE ? (
+        <section className="section monthly-returns-section home-panel-section" id="monthly-returns">
+          <div className="section-heading">
+            <h2>Monthly Returns</h2>
+            <p>
+              The complete six-month tested return history for the Formenos strategy.
+            </p>
+          </div>
+          <div className="monthly-return-grid">
+            {monthlyReturns.map(([month, value]) => (
+              <article className="monthly-return-card" key={month}>
+                <span>{month}</span>
+                <strong>{value}</strong>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
 
             </>
@@ -464,18 +508,20 @@ function App() {
             </p>
           </div>
 
-          <div className="footer-columns">
-            {footerColumns.map((column) => (
-              <nav key={column.heading}>
-                <h3>{column.heading}</h3>
-                {column.links.map(([label, href]) => (
-                  <a href={href} key={label}>
-                    {label}
-                  </a>
-                ))}
-              </nav>
-            ))}
-          </div>
+          {footerColumns.length > 0 ? (
+            <div className="footer-columns">
+              {footerColumns.map((column) => (
+                <nav key={column.heading}>
+                  <h3>{column.heading}</h3>
+                  {column.links.map(([label, href]) => (
+                    <a href={href} key={label}>
+                      {label}
+                    </a>
+                  ))}
+                </nav>
+              ))}
+            </div>
+          ) : null}
         </div>
 
         <div className="footer-bottom">
