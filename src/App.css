@@ -277,8 +277,8 @@
   display: none;
 }
 
-/* the shell is a 100vh flex column, so flex:1 + centring puts the content in the middle
-   of whatever space is left between the header and the footer — no magic numbers */
+/* the main panel owns the whole first screen (viewport minus the header chrome), so the
+   footer starts below the fold. Content is centred inside it. */
 .app-shell {
   background: #ffffff;
   color: #080808;
@@ -286,7 +286,7 @@
   flex: 1;
   flex-direction: column;
   justify-content: center;
-  min-height: 0;
+  min-height: calc(100svh - var(--nav-height, 60px) - var(--announcement-height, 0px));
 }
 
 .section {
@@ -331,122 +331,293 @@
   padding-top: clamp(36px, 4vw, 64px);
 }
 
-@media (min-width: 1000px) {
-  .manifesto-section {
-    align-items: start;
-    grid-template-columns: minmax(0, 1.42fr) minmax(220px, 0.58fr);
-  }
+/* ══ Landing page ══════════════════════════════════════════════════════════
+   Paper ground, cells divided by a hairline lattice, and a live signal graphic.
+   Lines are structural (they define the grid) rather than decorative. */
 
-  .manifesto {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .manifesto-facts {
-    grid-column: 2;
-    grid-row: 1;
-    position: sticky;
-    top: 96px;
-  }
-
-  /* manifesto shown on its own — take the whole row instead of leaving the rail's gap */
-  .manifesto-section--solo {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .manifesto-section--solo .manifesto {
-    grid-column: 1 / -1;
-  }
+.app-shell {
+  --paper: #ffffff;
+  --ink: #0d0e10;
+  --muted-ink: #55585e;
+  --line: #e6e4e0;
 }
 
-/* left rail: label stacked over value so long values stay readable in a narrow column */
-.manifesto-facts {
-  border-top: 1px solid #e3e4e6;
+.hero,
+.split-panel {
+  background: var(--paper);
 }
 
-.fact-row {
-  border-bottom: 1px solid #e9eaec;
-  display: grid;
-  gap: 4px;
-  padding: 12px 0;
+/* ── hero ───────────────────────────────────────────────────────────────── */
+.hero {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: clamp(34px, 5vw, 76px);
+  padding-top: clamp(34px, 5vw, 76px);
 }
 
-.fact-row span {
-  color: #8a8f98;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.fact-row strong {
-  color: #111111;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  line-height: 1.4;
-}
-
-/* quiet panel — sits back from the page rather than competing with the nav and cards */
-.manifesto {
-  background: #f6f6f7;
-  border-left: 2px solid var(--accent);
-  color: #1a1c20;
-  padding: clamp(28px, 3.4vw, 56px);
-}
-
-.manifesto-eyebrow {
-  color: var(--accent);
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.manifesto-head h1 {
-  color: #050505;
-  font-size: clamp(26px, 2.7vw, 40px);
+.hero h1 {
+  color: var(--ink);
+  font-size: clamp(30px, 3.5vw, 50px);
   font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.14;
-  margin: 14px 0 0;
-  max-width: 26ch;
-  text-wrap: balance;
+  letter-spacing: -0.045em;
+  line-height: 1.06;
+  margin: 0;
 }
 
-.manifesto-head {
-  border-bottom: 1px solid #e2e2e5;
-  padding-bottom: clamp(22px, 2.4vw, 32px);
+.hero-sub {
+  color: var(--muted-ink);
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.62;
+  margin: clamp(18px, 2vw, 26px) 0 0;
+  max-width: 52ch;
 }
 
-.manifesto-prose {
-  margin-top: clamp(26px, 2.8vw, 38px);
-  max-width: 60ch;
+.hero-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: clamp(24px, 2.6vw, 34px);
 }
 
-.manifesto-prose p {
-  color: #3a3d44;
-  font-size: clamp(15px, 1vw, 16.5px);
-  line-height: 1.72;
-  margin: 0 0 1.25em;
+/* ── split panel: diagram + rows ─────────────────────────────────────────── */
+/* One padding scheme for every cell: the outer edge always matches the page gutter (so
+   panel content lines up with the header logo, hero and footer), the inner edge at the
+   divider uses a smaller consistent inset. --pad-l/--pad-r inherit down to the rows. */
+.split-panel {
+  --pad-inner: clamp(20px, 2.6vw, 44px);
+  --pad-y: clamp(20px, 2.4vw, 36px);
+
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 0;
 }
 
-.manifesto-prose p:last-child {
-  margin-bottom: 0;
+.split-panel > * {
+  --pad-l: var(--shell-gutter);
+  --pad-r: var(--shell-gutter);
 }
 
-/* wide enough for two columns: flow the prose so it fills the panel instead of
-   leaving half of it empty. Paragraphs are kept whole across the column break. */
+.panel-visual {
+  align-content: center;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  justify-items: center;
+  min-height: 200px;
+  padding: var(--pad-y) var(--pad-r) var(--pad-y) var(--pad-l);
+}
+
+/* signal graphic — a row of bars that rise and light up around the cursor. Height and
+   colour are set per bar so a bar is always wholly lit or unlit, never part-shaded. */
+.signal {
+  align-items: flex-end;
+  display: flex;
+  gap: clamp(3px, 0.45vw, 6px);
+  height: clamp(150px, 17vw, 230px);
+  width: min(100%, 440px);
+}
+
+.bar {
+  background: #e7e4e0;
+  border-radius: 1px;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  transition:
+    height 160ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.bar::after {
+  background: var(--accent);
+  border-radius: inherit;
+  content: '';
+  inset: 0;
+  opacity: var(--lit, 0);
+  position: absolute;
+  transition: opacity 160ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .bar::after {
+    transition: none;
+  }
+}
+
+.panel-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-head {
+  border-bottom: 1px solid var(--line);
+  padding: var(--pad-y) var(--pad-r) var(--pad-y) var(--pad-l);
+}
+
+.panel-head h2 {
+  color: var(--ink);
+  font-size: clamp(20px, 1.9vw, 27px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.22;
+  margin: 16px 0 0;
+  max-width: 24ch;
+}
+
+.panel-row {
+  border-bottom: 1px solid var(--line);
+  padding: var(--pad-y) var(--pad-r) var(--pad-y) var(--pad-l);
+}
+
+.panel-row:last-child {
+  border-bottom: 0;
+}
+
+.panel-row h3 {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.panel-row p {
+  color: var(--muted-ink);
+  font-size: 15px;
+  line-height: 1.62;
+  margin: 6px 0 0;
+}
+
+.loop {
+  position: relative;
+  width: min(100%, 360px);
+}
+
+.loop-frame {
+  border: 1px dashed rgba(193, 18, 31, 0.5);
+  display: grid;
+  padding: clamp(34px, 4vw, 54px);
+  place-items: center;
+}
+
+.loop-mark {
+  position: relative;
+}
+
+.loop-mark img {
+  display: block;
+  height: clamp(80px, 9vw, 128px);
+  width: clamp(80px, 9vw, 128px);
+}
+
+/* horizontal scanlines over the mark */
+.loop-mark::after {
+  background: repeating-linear-gradient(to bottom, #ffffff 0 1px, transparent 1px 4px);
+  content: '';
+  inset: 0;
+  position: absolute;
+}
+
+.loop-tag {
+  background: var(--ink);
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  left: 50%;
+  letter-spacing: 0.14em;
+  padding: 5px 11px;
+  position: absolute;
+  text-transform: uppercase;
+  top: 0;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* logo wall — hairline grid of investor wordmarks.
+   Rules are drawn as interior borders on the cells rather than as a 1px grid gap over a
+   coloured ground: the gap technique leaves a sub-pixel bleed of the ground colour at the
+   grid's outer edges, which showed up as stray rules that lined up with nothing. */
+.logo-wall {
+  align-content: stretch;
+  justify-items: stretch;
+  min-height: 0;
+  padding: 0;
+}
+
+.logo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  height: 100%;
+  width: 100%;
+}
+
+.logo-cell {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  display: flex;
+  justify-content: center;
+  min-height: clamp(84px, 9vw, 124px);
+  padding: 18px 16px;
+}
+
+/* no rule on the outer edges — the panel's own borders do that job */
+.logo-cell:nth-child(2n) {
+  border-right: 0;
+}
+
+.logo-cell:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.logo-cell img {
+  height: auto;
+  max-height: calc(clamp(20px, 2.1vw, 28px) * var(--logo-scale, 1));
+  max-width: min(72%, 150px);
+  object-fit: contain;
+  width: auto;
+}
+
+.logo-cell span {
+  color: var(--ink);
+  font-size: clamp(13px, 1.15vw, 16px);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
 @media (min-width: 900px) {
-  .manifesto-prose {
-    column-gap: clamp(40px, 4vw, 76px);
-    columns: 2;
-    max-width: none;
+  /* even split so every panel's divider lands on the same vertical line */
+  .split-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .manifesto-prose p {
-    break-inside: avoid;
+  .panel-visual {
+    border-bottom: 0;
+  }
+
+  /* Divider always on the right edge of whichever cell comes first, so it lands on the
+     same pixel in every panel. Putting it on the left edge of the second cell in the
+     mirrored variant shifted it by 1px and the intersections stopped lining up. */
+  .split-panel > :first-child {
+    --pad-r: var(--pad-inner);
+
+    border-right: 1px solid var(--line);
+  }
+
+  .split-panel > :last-child {
+    --pad-l: var(--pad-inner);
+  }
+
+  /* The logo wall divides its cell into equal thirds. The rows opposite are sized by
+     their content, so their rules landed 2-3px off. Give that column equal thirds too
+     and the horizontal rules meet exactly across the divider. */
+  .split-panel--aligned .panel-rows {
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -2067,7 +2238,11 @@
     width: auto;
   }
 
-  .nav > .nav-links,
+  /* the hamburger replaces the inline links at this width */
+  .nav > .nav-links {
+    display: none;
+  }
+
   .mobile-menu-toggle {
     align-items: center;
     background: #f5f5f5;
@@ -2164,5 +2339,86 @@
   .site-shell {
     --shell-inset: 0px;
     --shell-gutter: 18px;
+  }
+}
+
+/* Height of the fixed chrome above the main panel, so .app-shell can claim exactly the
+   rest of the first screen. Declared last for an unambiguous cascade. */
+.site-shell {
+  --nav-height: 60px;
+  --announcement-height: 0px;
+}
+
+.announcement ~ .site-shell {
+  --announcement-height: 37px;
+}
+
+@media (max-width: 900px) {
+  .site-shell {
+    --nav-height: 64px;
+  }
+}
+
+@media (max-width: 560px) {
+  /* the announcement is display:none at this width */
+  .announcement ~ .site-shell {
+    --announcement-height: 0px;
+  }
+}
+
+/* stacked layout: the visual always leads, whichever order it sits in the markup */
+@media (max-width: 899px) {
+  .panel-visual {
+    order: -1;
+  }
+}
+
+/* ── mobile: tighten the landing rhythm ─────────────────────────────────── */
+@media (max-width: 700px) {
+  /* let the headline wrap naturally rather than breaking at a fixed point */
+  .hero-break {
+    display: none;
+  }
+
+  .hero {
+    padding-bottom: 30px;
+    padding-top: 30px;
+  }
+
+  .hero-sub {
+    margin-top: 14px;
+  }
+
+  .hero-actions {
+    margin-top: 20px;
+  }
+
+  .split-panel {
+    --pad-y: 22px;
+  }
+
+  .panel-visual {
+    min-height: 0;
+  }
+
+  .signal {
+    height: 130px;
+    width: 100%;
+  }
+
+  .loop {
+    width: min(100%, 260px);
+  }
+
+  .loop-frame {
+    padding: 26px;
+  }
+
+  .panel-head h2 {
+    margin-top: 0;
+  }
+
+  .logo-cell {
+    min-height: 68px;
   }
 }

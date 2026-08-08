@@ -1,45 +1,77 @@
+import type React from 'react'
 import { useEffect, useState } from 'react'
 import './App.css'
 import { WinRateBarChart } from './components/FundCharts'
 
 type PageId = 'home' | 'strategy' | 'returns' | 'research' | 'risk' | 'company' | 'investors' | 'contact'
 
-const monthlyReturns = [
-  ['Jan', '+0.93%'],
-  ['Feb', '-5.04%'],
-  ['Mar', '-2.86%'],
-  ['Apr', '+12.23%'],
-  ['May', '+11.46%'],
-  ['Jun', '-3.17%'],
-]
-
-const overviewColumns = [
-  [
-    ['Fund Style', 'AI-native long/short'],
-    ['Core Playbook', 'Concentrated conviction'],
-    ['Position Count', '10-30 core positions'],
-    ['Risk Target', 'Asymmetric 3:1 setups'],
-  ],
-  [
-    ['Strategy Focus', 'Macro-driven security selection'],
-    ['Capital Allocation', 'Conviction-weighted'],
-    ['Primary Themes', 'AI, mega-cap dominance, special situations'],
-    ['Liquidity Profile', 'Public liquid equities'],
-  ],
-]
-
-// Temporarily showing only the manifesto (plus header and footer). Flip to true to bring
-// back the fund-facts rail, the Monthly Returns section, and the nav/footer links to them.
+// The Monthly Returns / fund-facts sections this once gated no longer exist in this file;
+// all that remains behind the flag are the nav and footer links that pointed at them.
 const SHOW_FULL_SITE = false
+
+// All body copy below is the manifesto verbatim. Headings and section labels are
+// editorial framing only — no claims beyond what the copy states.
+const pillars: Array<[string, string]> = [
+  [
+    'Agents do the reading.',
+    'Research runs continuously, covering far more ground than a desk of analysts could, and surfacing only what is worth a decision.',
+  ],
+  [
+    'A lean shop by design.',
+    'A small team with deep internal tooling, built to stay that way. We add software before we add headcount.',
+  ],
+]
+
+const strategy: Array<[string, string]> = [
+  [
+    'Multiple strategies, one book.',
+    'Several strategies run alongside one another across public markets, expressed through a single coherent book.',
+  ],
+  [
+    'Consistent and hedged.',
+    'Built for returns that hold up across different regimes, with risk managed deliberately rather than left to chance.',
+  ],
+]
+
+const trackRecord: Array<[string, string]> = [
+  [
+    'Backed by the people behind the tools.',
+    'We raised our last round from the first investors in Cursor, Cognition, and Etched, along with angels from DoorDash and Kalshi.',
+  ],
+  [
+    'Measured against the incumbents.',
+    'Early results have compared favourably with firms many times our size and many times our headcount.',
+  ],
+]
+
+const BAR_COUNT = 46
+
+// A fixed pseudo-signal — deterministic so the shape is stable across renders.
+const BAR_BASE = Array.from({ length: BAR_COUNT }, (_, i) => {
+  const a =
+    Math.sin(i * 0.55) * 0.5 + Math.sin(i * 1.7 + 1.2) * 0.26 + Math.sin(i * 0.31 + 2.4) * 0.24
+  return 0.22 + ((a + 1) / 2) * 0.4
+})
+
+// [name, logo file, optical scale] — logo is optional; cells fall back to the wordmark
+// as text. Scale trims wordmark-only logos, which otherwise read far larger than logos
+// whose height is mostly icon.
+const investors: Array<[string, string | null, number?]> = [
+  ['Cursor', '/logos/cursor.png'],
+  ['Cognition', '/logos/cognition.png'],
+  ['Etched', '/logos/etched.png', 0.78],
+  ['DoorDash', '/logos/doordash.png', 0.64],
+  ['Kalshi', '/logos/kalshi.png', 0.6],
+  ['Aaru', '/logos/aaru.png', 0.82],
+]
 
 const CONTACT_EMAIL = 'sebastian@formenos.ai'
 
-const navLinks = SHOW_FULL_SITE
-  ? [
-      { label: 'Fund', href: '#overview' },
-      { label: 'Returns', href: '#monthly-returns' },
-    ]
-  : []
+const navLinks = [
+  { label: 'AI-Native', href: '#how' },
+  { label: 'Strategy', href: '#strategy' },
+  { label: 'Backing', href: '#backing' },
+]
 
 const footerColumns = SHOW_FULL_SITE
   ? [
@@ -328,6 +360,7 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [pointer, setPointer] = useState<number | null>(null)
   const [showAnnouncement, setShowAnnouncement] = useState(true)
   const [page, setPage] = useState<PageId>(() => getPageFromHash())
 
@@ -415,80 +448,133 @@ function App() {
         <main className="app-shell">
           {page === 'home' ? (
             <>
-      <section
-        className={
-          SHOW_FULL_SITE
-            ? 'section manifesto-section'
-            : 'section manifesto-section manifesto-section--solo'
-        }
-        id="overview"
-      >
-        <article className="manifesto">
-        <div className="manifesto-head">
-          <span className="manifesto-eyebrow">Manifesto</span>
-          <h1>Formenos is the hedge fund run like a technology company.</h1>
-        </div>
-
-        <div className="manifesto-prose">
-          <p>
-            Many funds like Millennium, Point72, and Balyasny have an egregious headcount
-            that is disproportionate to the assets that they manage.
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="section hero" id="overview">
+          <h1>
+            Formenos is the hedge fund{' '}
+            <br className="hero-break" />
+            run like a technology company.
+          </h1>
+          <p className="hero-sub">
+            Many funds like Millennium, Point72, and Balyasny have an egregious headcount that
+            is disproportionate to the assets that they manage.
           </p>
-          <p>
-            Our goal is to be the most lean and successful investment firm ever, so we build
-            internal tooling to run our shop like a high-growth tech company.
-          </p>
-          <p>
-            AI-Native means that we harness AI to replace the role of analysts and researchers.
-            It does not mean we use AI to make decisions.
-          </p>
-          <p>
-            We trade multiple strategies, all on public equities, across many sectors. Our goal
-            is to provide the highest returns possible, while keeping those returns consistent
-            and hedged.
-          </p>
-          <p>
-            We raised our last round of venture financing at a $25M valuation from the first
-            investors in Cursor, Cognition, Etched, and angels from DoorDash and Kalshi.
-          </p>
-          <p>
-            Since then, we have outperformed leading funds like those mentioned above. We
-            started in April, and our annualized returns since then are ~70%.
-          </p>
+          <div className="hero-actions">
+            <a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>
+              Get in touch
+            </a>
+            <a className="button button-secondary" href="#how">
+              How we work
+            </a>
           </div>
-        </article>
 
-        {SHOW_FULL_SITE ? (
-          <aside className="manifesto-facts" aria-label="Fund facts">
-            {overviewColumns.flat().map(([label, value]) => (
-              <div className="fact-row" key={label}>
-                <span>{label}</span>
-                <strong>{value}</strong>
-              </div>
-            ))}
-          </aside>
-        ) : null}
       </section>
 
-      {SHOW_FULL_SITE ? (
-        <section className="section monthly-returns-section home-panel-section" id="monthly-returns">
-          <div className="section-heading">
-            <h2>Monthly Returns</h2>
-            <p>
-              The complete six-month tested return history for the Formenos strategy.
-            </p>
+      {/* ── Pipeline: diagram + pillars ───────────────────────────────────── */}
+      <section className="section split-panel" id="how">
+        <div className="panel-visual" aria-hidden="true">
+          <div
+            className="signal"
+            onMouseLeave={() => setPointer(null)}
+            onMouseMove={(e) => {
+              const r = e.currentTarget.getBoundingClientRect()
+              setPointer(((e.clientX - r.left) / r.width) * (BAR_COUNT - 1))
+            }}
+          >
+            {BAR_BASE.map((base, i) => {
+              // distance from the cursor drives both height and how lit the bar is,
+              // applied per bar so a bar is always fully coloured or not at all
+              const d = pointer === null ? Math.abs(i - (BAR_COUNT - 1) / 2) : Math.abs(i - pointer)
+              const reach = pointer === null ? 9 : 6
+              const lift = Math.max(0, 1 - d / reach)
+              const eased = lift * lift
+              return (
+                <i
+                  className="bar"
+                  key={i}
+                  style={
+                    {
+                      height: `${(base + eased * 0.34) * 100}%`,
+                      '--lit': pointer === null ? eased * 0.5 : eased,
+                    } as React.CSSProperties
+                  }
+                />
+              )
+            })}
           </div>
-          <div className="monthly-return-grid">
-            {monthlyReturns.map(([month, value]) => (
-              <article className="monthly-return-card" key={month}>
-                <span>{month}</span>
-                <strong>{value}</strong>
-              </article>
+        </div>
+
+        <div className="panel-rows">
+          <div className="panel-head">
+            <h2>Agents do the research. People make the decisions.</h2>
+          </div>
+          {pillars.map(([title, body]) => (
+            <div className="panel-row" key={title}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Strategy: rows left, feedback-loop visual right ───────────────── */}
+      <section className="section split-panel split-panel--mirror" id="strategy">
+        <div className="panel-rows">
+          <div className="panel-head">
+            <h2>Many strategies, hedged into one consistent book.</h2>
+          </div>
+          {strategy.map(([title, body]) => (
+            <div className="panel-row" key={title}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))}
+        </div>
+        <div className="panel-visual panel-visual--loop" aria-hidden="true">
+          <div className="loop">
+            <span className="loop-tag">Public equities</span>
+            <div className="loop-frame">
+              <div className="loop-mark">
+                <img src="/favicon.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      {/* ── Backing: mark left, rows right ──────────────────────────────── */}
+      <section className="section split-panel split-panel--aligned" id="backing">
+        <div className="panel-visual logo-wall">
+          <div className="logo-grid">
+            {investors.map(([name, logo, scale]) => (
+              <div className="logo-cell" key={name}>
+                {logo ? (
+                  <img
+                    alt={name}
+                    src={logo}
+                    style={scale ? ({ '--logo-scale': scale } as React.CSSProperties) : undefined}
+                  />
+                ) : (
+                  <span>{name}</span>
+                )}
+              </div>
             ))}
           </div>
-        </section>
-      ) : null}
+        </div>
+        <div className="panel-rows">
+          <div className="panel-head">
+            <h2>Backed by the first investors in Cursor, Cognition, and Etched.</h2>
+          </div>
+          {trackRecord.map(([title, body]) => (
+            <div className="panel-row" key={title}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))}
+        </div>
 
+      </section>
 
             </>
           ) : (
