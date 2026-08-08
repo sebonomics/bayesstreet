@@ -68,7 +68,7 @@ const investors: Array<[string, string | null, number?]> = [
 const CONTACT_EMAIL = 'sebastian@formenos.ai'
 
 const navLinks = [
-  { label: 'AI-Native', href: '#how' },
+  { label: 'Fund', href: '#how' },
   { label: 'Strategy', href: '#strategy' },
   { label: 'Backing', href: '#backing' },
 ]
@@ -359,7 +359,6 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
 }
 
 function App() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [pointer, setPointer] = useState<number | null>(null)
   const [showAnnouncement, setShowAnnouncement] = useState(true)
   const [page, setPage] = useState<PageId>(() => getPageFromHash())
@@ -404,19 +403,6 @@ function App() {
           </a>
 
           {navLinks.length > 0 ? (
-            <button
-              aria-expanded={mobileMenuOpen}
-              aria-label="Toggle navigation"
-              className="mobile-menu-toggle"
-              onClick={() => setMobileMenuOpen((open) => !open)}
-              type="button"
-            >
-              <span />
-              <span />
-            </button>
-          ) : null}
-
-          {navLinks.length > 0 ? (
             <nav className="nav-links" aria-label="Primary navigation">
               {navLinks.map((menu) => (
                 <div className="nav-item" key={menu.label}>
@@ -434,15 +420,6 @@ function App() {
             </a>
           </div>
 
-          {mobileMenuOpen && navLinks.length > 0 ? (
-            <nav className="mobile-menu" aria-label="Mobile navigation">
-              {navLinks.map((menu) => (
-                <a href={menu.href} key={menu.label} onClick={() => setMobileMenuOpen(false)}>
-                  {menu.label}
-                </a>
-              ))}
-            </nav>
-          ) : null}
         </header>
 
         <main className="app-shell">
@@ -456,8 +433,9 @@ function App() {
             run like a technology company.
           </h1>
           <p className="hero-sub">
-            Many funds like Millennium, Point72, and Balyasny have an egregious headcount that
-            is disproportionate to the assets that they manage.
+            We&rsquo;re an AI-native hedge fund and research lab{' '}
+            <br className="hero-break" />
+            post-training frontier models into a market edge.
           </p>
           <div className="hero-actions">
             <a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>

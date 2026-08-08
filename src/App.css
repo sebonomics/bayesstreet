@@ -2035,7 +2035,7 @@
 }
 
 @media (max-width: 560px) {
-  .section {
+  .section:not(.split-panel) {
     padding-bottom: 36px;
     padding-top: 36px;
   }
@@ -2373,52 +2373,92 @@
   }
 }
 
-/* ── mobile: tighten the landing rhythm ─────────────────────────────────── */
+/* ── mobile: one vertical rhythm for the whole page ─────────────────────── */
 @media (max-width: 700px) {
   /* let the headline wrap naturally rather than breaking at a fixed point */
   .hero-break {
     display: none;
   }
 
+  /* header: real vertical padding rather than a bare min-height, and a wordmark that
+     holds its own against the Contact button */
+  .nav {
+    min-height: 0;
+    padding-bottom: 16px;
+    padding-top: 18px;
+  }
+
+  .nav .brand-wordmark {
+    height: 24px;
+  }
+
+  .nav-actions .button {
+    min-height: 36px;
+    padding: 0 14px;
+  }
+
   .hero {
-    padding-bottom: 30px;
-    padding-top: 30px;
+    padding-bottom: 44px;
+    padding-top: 40px;
+  }
+
+  .hero h1 {
+    font-size: 29px;
+    line-height: 1.12;
   }
 
   .hero-sub {
-    margin-top: 14px;
+    margin-top: 18px;
   }
 
   .hero-actions {
-    margin-top: 20px;
+    margin-top: 26px;
   }
 
+  /* same padding on every panel cell, so head, rows and visuals share one rhythm.
+     The panel itself adds none — its cells own the vertical space. */
   .split-panel {
-    --pad-y: 22px;
+    --pad-y: 26px;
+
+    padding-bottom: 0;
+    padding-top: 0;
   }
 
   .panel-visual {
     min-height: 0;
+    padding-bottom: 34px;
+    padding-top: 34px;
   }
 
   .signal {
-    height: 130px;
+    height: 140px;
     width: 100%;
-  }
-
-  .loop {
-    width: min(100%, 260px);
-  }
-
-  .loop-frame {
-    padding: 26px;
   }
 
   .panel-head h2 {
     margin-top: 0;
   }
 
+  .loop {
+    width: min(100%, 240px);
+  }
+
+  .loop-frame {
+    padding: 24px;
+  }
+
+  /* the wall fills its cell; the cells themselves carry the breathing room */
+  .logo-wall {
+    padding: 0;
+  }
+
   .logo-cell {
-    min-height: 68px;
+    min-height: 96px;
+    padding: 20px 14px;
+  }
+
+  .logo-cell img {
+    max-height: calc(22px * var(--logo-scale, 1));
   }
 }
+
