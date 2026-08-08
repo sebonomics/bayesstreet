@@ -371,6 +371,11 @@
   max-width: 52ch;
 }
 
+/* swap a word between breakpoints without duplicating the whole headline */
+.only-mobile {
+  display: none;
+}
+
 .hero-actions {
   align-items: center;
   display: flex;
@@ -518,22 +523,6 @@
   position: absolute;
 }
 
-.loop-tag {
-  background: var(--ink);
-  color: #ffffff;
-  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-  font-size: 10px;
-  font-weight: 600;
-  left: 50%;
-  letter-spacing: 0.14em;
-  padding: 5px 11px;
-  position: absolute;
-  text-transform: uppercase;
-  top: 0;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
-  z-index: 2;
-}
 
 /* logo wall — hairline grid of investor wordmarks.
    Rules are drawn as interior borders on the cells rather than as a 1px grid gap over a
@@ -2366,8 +2355,19 @@
   }
 }
 
-/* stacked layout: the visual always leads, whichever order it sits in the markup */
+/* Stacked layout: every panel reads heading, then graphic, then rows. The heading lives
+   inside .panel-rows, so `order` alone can't lift it above the visual — dropping the rows
+   wrapper to display:contents promotes the head and the rows into the panel's own grid,
+   at which point all three can be ordered independently. */
 @media (max-width: 899px) {
+  .panel-rows {
+    display: contents;
+  }
+
+  .panel-head {
+    order: -2;
+  }
+
   .panel-visual {
     order: -1;
   }
@@ -2378,6 +2378,14 @@
   /* let the headline wrap naturally rather than breaking at a fixed point */
   .hero-break {
     display: none;
+  }
+
+  .hide-mobile {
+    display: none;
+  }
+
+  .only-mobile {
+    display: inline;
   }
 
   /* header: real vertical padding rather than a bare min-height, and a wordmark that

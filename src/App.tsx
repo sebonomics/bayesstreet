@@ -430,7 +430,9 @@ function App() {
           <h1>
             Formenos is the hedge fund{' '}
             <br className="hero-break" />
-            run like a technology company.
+            run like a{' '}
+            <span className="hide-mobile">technology</span>
+            <span className="only-mobile">tech</span> company.
           </h1>
           <p className="hero-sub">
             We&rsquo;re an AI-native hedge fund and research lab{' '}
@@ -510,7 +512,6 @@ function App() {
         </div>
         <div className="panel-visual panel-visual--loop" aria-hidden="true">
           <div className="loop">
-            <span className="loop-tag">Public equities</span>
             <div className="loop-frame">
               <div className="loop-mark">
                 <img src="/favicon.png" alt="" />
