@@ -32,6 +32,13 @@ body {
   margin: 0;
 }
 
+/* Full-bleed decoration is sized in vw, which includes a classic scrollbar. `clip`
+   trims the overhang without creating a scroll container, so position: sticky still
+   resolves against the viewport. */
+html {
+  overflow-x: clip;
+}
+
 * {
   box-sizing: border-box;
 }

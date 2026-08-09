@@ -340,6 +340,11 @@
   --ink: #0d0e10;
   --muted-ink: #55585e;
   --line: #e6e4e0;
+
+  /* the hero, and only the hero, runs on these */
+  --night: #02030a;
+  --night-ink: #f0ece4;
+  --night-muted: rgba(240, 236, 228, 0.66);
 }
 
 .hero,
@@ -371,6 +376,155 @@
   max-width: 52ch;
 }
 
+/* The backdrop is desktop-only. Mobile keeps the paper hero it always had: the
+   scene needs a full screen to read, and none of it is worth the paint cost in a
+   short band on a phone. Display, not visibility — the SVG never rasterises. */
+.hero-backdrop {
+  display: none;
+}
+
+/* ══ desktop hero ══════════════════════════════════════════════════════════
+   Above the breakpoint the first screen inverts: it claims the whole viewport
+   (minus the fixed chrome), goes to night, and everything below it stays on
+   paper. The hard cut at the section boundary is deliberate. Every night-only
+   rule lives in this one block so the mobile hero can't drift out from under it. */
+@media (min-width: 701px) {
+  .hero {
+    background: var(--night);
+    border-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    isolation: isolate;
+    justify-content: center;
+    min-height: calc(100svh - var(--nav-height, 60px) - var(--announcement-height, 0px));
+    position: relative;
+  }
+
+  /* ── backdrop ────────────────────────────────────────────────────────────
+     Layered back to front: the dark field and its bloom, the simulation, then
+     grain and vignette over the lot. Everything is drawn — no image asset — and
+     sits at z-index -1 inside the hero's own stacking context, so it clears the
+     hero background but stays under the copy. Static and inert to the pointer. */
+  .hero-backdrop {
+    display: block;
+    inset: 0 calc(50% - 50vw); /* full bleed, same idiom as .nav::before */
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    z-index: -1;
+  }
+
+  /* the field: black almost all the way down, with a crimson bloom sitting where
+     the cone flares so the simulation has something to burn against */
+  .hero-sky {
+    background-image:
+      radial-gradient(
+        48% 54% at 70% 54%,
+        rgba(193, 18, 31, 0.34) 0%,
+        rgba(158, 12, 26, 0.18) 24%,
+        rgba(96, 10, 22, 0.08) 46%,
+        transparent 74%
+      ),
+      linear-gradient(to bottom, #010104 0%, #030408 38%, #05060c 68%, #070811 88%, #090a14 100%);
+    inset: 0;
+    position: absolute;
+  }
+
+  /* ── the simulation ──────────────────────────────────────────────────────
+     Hairlines throughout, with density doing the work. Masked rather than simply
+     faded, so the fan dissolves into the field instead of ending at an edge. */
+  .hero-fan {
+    bottom: 0;
+    display: block;
+    height: min(72%, 620px);
+    left: 0;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 82%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 82%, transparent);
+    position: absolute;
+    width: 100%;
+  }
+
+  /* the viewBox is stretched to the frame, so every stroke has to opt out of that
+     scaling or the near-vertical segments come out heavier than the flat ones */
+  .hero-fan path {
+    fill: none;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* neutral, not blue — on a black field any cool tint in the cloud reads as haze */
+  .fan-cloud path {
+    stroke: rgba(224, 220, 224, 0.13);
+    stroke-width: 0.75;
+  }
+
+  /* a few drawn hot, so the eye has somewhere to land in the noise */
+  .fan-cloud .fan-lit {
+    stroke: rgba(214, 34, 46, 0.62);
+    stroke-width: 0.9;
+  }
+
+  /* the cone: the only deterministic thing in the picture, so it reads as drawn
+     rather than simulated */
+  .fan-envelope path {
+    stroke: rgba(236, 132, 132, 0.28);
+    stroke-dasharray: 3 5;
+    stroke-width: 1;
+  }
+
+  .fan-realised {
+    filter: drop-shadow(0 0 6px rgba(207, 20, 34, 0.6));
+    stroke: #ffe0da;
+    stroke-width: 1.5;
+  }
+
+  /* grain and vignette over everything, so the drawn layers read as one exposure
+     rather than a stack of gradients */
+  .hero-backdrop::after {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"),
+      radial-gradient(125% 90% at 52% 44%, transparent 40%, rgba(0, 0, 0, 0.42) 100%);
+    background-size:
+      180px 180px,
+      100% 100%;
+    content: '';
+    inset: 0;
+    opacity: 0.32;
+    position: absolute;
+  }
+
+  /* ── type on the night ───────────────────────────────────────────────────── */
+  .hero h1 {
+    color: var(--night-ink);
+  }
+
+  .hero-sub {
+    color: var(--night-muted);
+  }
+
+  /* the page buttons are built for paper — invert them for this one section */
+  .hero .button-dark {
+    background: var(--night-ink);
+    border-color: var(--night-ink);
+    color: #06080f;
+  }
+
+  .hero .button-dark:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+  }
+
+  .hero .button-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(236, 231, 221, 0.3);
+    color: var(--night-ink);
+  }
+
+  .hero .button-secondary:hover {
+    background: rgba(255, 255, 255, 0.11);
+    border-color: rgba(236, 231, 221, 0.48);
+  }
+}
+
 /* swap a word between breakpoints without duplicating the whole headline */
 .only-mobile {
   display: none;
@@ -382,17 +536,6 @@
   flex-wrap: wrap;
   gap: 10px;
   margin-top: clamp(24px, 2.6vw, 34px);
-}
-
-/* Desktop: the hero claims the whole first screen (viewport minus the fixed chrome),
-   so everything below it is a deliberate scroll. Content sits centred in that space. */
-@media (min-width: 701px) {
-  .hero {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: calc(100svh - var(--nav-height, 60px) - var(--announcement-height, 0px));
-  }
 }
 
 /* ── split panel: diagram + rows ─────────────────────────────────────────── */

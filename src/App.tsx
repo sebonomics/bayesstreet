@@ -53,6 +53,60 @@ const BAR_BASE = Array.from({ length: BAR_COUNT }, (_, i) => {
   return 0.22 + ((a + 1) / 2) * 0.4
 })
 
+// ── hero backdrop: Monte Carlo ─────────────────────────────────────────────
+// The picture a fund actually works inside: a few hundred simulated price paths
+// diverging from a single point, with the confidence cone drawn over them. Every
+// path is a random walk with a small upward drift, evaluated once at module scope
+// from a seeded LCG so the fan is deterministic — identical on every render.
+// The apex sits low and left of centre and the cone opens up and to the right, so
+// the narrow end stays under the copy and the flare lands in open frame. The apex
+// has to be visible — masked off, a fan just reads as a band.
+const FAN = { w: 1600, h: 620, steps: 110, paths: 200 }
+const FAN_X0 = 150
+const FAN_Y0 = 580
+const FAN_DX = (FAN.w - FAN_X0) / FAN.steps
+const FAN_VOL = 8 // per-step standard deviation, in viewBox units
+const FAN_DRIFT = -2.6 // negative is up: the edge, applied evenly across the walk
+
+function seeded(seed: number) {
+  let s = seed
+  return () => {
+    s = (s * 1103515245 + 12345) % 2147483648
+    return s / 2147483648
+  }
+}
+
+// Sum of three uniforms — a cheap, good-enough normal. Box–Muller would be more
+// correct and completely invisible at this scale.
+function walk(seed: number) {
+  const next = seeded(seed)
+  const out: string[] = [`M${FAN_X0} ${FAN_Y0}`]
+  let y = FAN_Y0
+  for (let i = 1; i <= FAN.steps; i++) {
+    y += FAN_DRIFT + (next() + next() + next() - 1.5) * FAN_VOL
+    out.push(`L${(FAN_X0 + i * FAN_DX).toFixed(1)} ${y.toFixed(1)}`)
+  }
+  return out.join(' ')
+}
+
+const FAN_PATHS = Array.from({ length: FAN.paths }, (_, i) => walk(i * 7919 + 13))
+
+// A handful pulled out of the cloud and drawn hot, so the eye has somewhere to go
+const FAN_LIT = [17, 46, 88, 134, 171]
+const FAN_REALISED = walk(FAN.paths * 7919 + 13)
+
+// ±1σ and ±2σ. Dispersion grows with the square root of time, which is what gives
+// the cone its flare — the one piece of the image that isn't random.
+const FAN_ENVELOPES = [1, -1, 2, -2].map((k) => {
+  const out: string[] = []
+  for (let i = 0; i <= 60; i++) {
+    const step = (i / 60) * FAN.steps
+    const y = FAN_Y0 + FAN_DRIFT * step + k * FAN_VOL * Math.sqrt(step)
+    out.push(`${i ? 'L' : 'M'}${(FAN_X0 + step * FAN_DX).toFixed(1)} ${y.toFixed(1)}`)
+  }
+  return out.join(' ')
+})
+
 // [name, logo file, optical scale] — logo is optional; cells fall back to the wordmark
 // as text. Scale trims wordmark-only logos, which otherwise read far larger than logos
 // whose height is mostly icon.
@@ -427,6 +481,31 @@ function App() {
             <>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="section hero" id="overview">
+          {/* full-bleed backdrop — decorative, sits behind the copy */}
+          <div className="hero-backdrop" aria-hidden="true">
+            <span className="hero-sky" />
+
+            {/* The simulation, stretched edge to edge. `none` on preserveAspectRatio
+                is deliberate: the walk has no natural aspect, and stretching pins the
+                origin to the left edge and the flare to the right at every width. */}
+            <svg
+              className="hero-fan"
+              preserveAspectRatio="none"
+              viewBox={`0 0 ${FAN.w} ${FAN.h}`}
+            >
+              <g className="fan-cloud">
+                {FAN_PATHS.map((d, i) => (
+                  <path className={FAN_LIT.includes(i) ? 'fan-lit' : undefined} d={d} key={i} />
+                ))}
+              </g>
+              <g className="fan-envelope">
+                {FAN_ENVELOPES.map((d) => (
+                  <path d={d} key={d} />
+                ))}
+              </g>
+              <path className="fan-realised" d={FAN_REALISED} />
+            </svg>
+          </div>
           <h1>
             Formenos is the hedge fund{' '}
             <br className="hero-break" />
