@@ -4,10 +4,49 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Formenos</title>
+
+    <title>Formenos — AI-Native Hedge Fund</title>
+    <meta
+      name="description"
+      content="Formenos is an AI-native hedge fund and research lab, post-training frontier models into a market edge."
+    />
+    <link rel="canonical" href="https://formenos.ai/" />
+    <meta name="theme-color" content="#02030a" />
+
+    <!-- Open Graph: what Slack, LinkedIn, iMessage and Facebook read -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Formenos" />
+    <meta property="og:url" content="https://formenos.ai/" />
+    <meta property="og:title" content="Formenos — AI-Native Hedge Fund" />
+    <meta
+      property="og:description"
+      content="An AI-native hedge fund and research lab, post-training frontier models into a market edge."
+    />
+    <meta property="og:image" content="https://formenos.ai/formenos-logo.png" />
+    <meta property="og:image:alt" content="Formenos" />
+
+    <!-- summary, not summary_large_image: the image below is a wordmark, not a
+         1200×630 card. Swap both when a real card exists. -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Formenos — AI-Native Hedge Fund" />
+    <meta
+      name="twitter:description"
+      content="An AI-native hedge fund and research lab, post-training frontier models into a market edge."
+    />
+    <meta name="twitter:image" content="https://formenos.ai/formenos-logo.png" />
   </head>
   <body>
     <div id="root"></div>
+    <!-- The app renders client-side, so a crawler that doesn't run JavaScript sees
+         an empty root. This gives it something true to read. -->
+    <noscript>
+      <h1>Formenos is the hedge fund run like a technology company.</h1>
+      <p>
+        We're an AI-native hedge fund and research lab post-training frontier models into a market
+        edge. Agents do the research. People make the decisions.
+      </p>
+      <p><a href="mailto:sebastian@formenos.ai">sebastian@formenos.ai</a></p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
