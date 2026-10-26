@@ -228,9 +228,9 @@ const mobileHeroTitles = {
 }
 
 const mobileHeroSubtitles = {
-  research: 'An AI-native hedge fund focused on public markets.',
-  strategy: 'Public-market investing for founders and early-stage investors.',
-  company: 'A public-market investment firm serving Silicon Valley.',
+  research: 'An AI-native hedge fund|focused on public markets.',
+  strategy: 'Public-market investing for|founders and early-stage investors.',
+  company: 'A public-market investment firm|serving Silicon Valley.',
 }
 
 function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
@@ -241,7 +241,7 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
       <h1><span className="hero-title-desktop"><TitleLines text={content.heroTitle} /></span><span className="hero-title-mobile"><TitleLines text={mobileHeroTitles[page]} /></span></h1>
       <p className="hero-sub">
         <span className="hero-subtitle-desktop"><TitleLines text={content.heroSubtitle} /></span>
-        <span className="hero-subtitle-mobile">{mobileHeroSubtitles[page]}</span>
+        <span className="hero-subtitle-mobile"><TitleLines text={mobileHeroSubtitles[page]} /></span>
       </p>
       <div className="hero-actions"><a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>Get in touch</a><a className="button button-secondary" href={`#${page}-approach`}>Learn more</a></div>
     </section>
@@ -336,20 +336,25 @@ function App() {
             <>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="section hero" id="overview">
+          <div className="hero-panels" aria-hidden="true">
+            <svg viewBox="0 0 800 800" fill="none" focusable="false">
+              {Array.from({ length: 18 }, (_, index) => (
+                <rect key={index} x={90 + index * 13} y={90 + index * 10}
+                  width={510 - index * 16} height={590 - index * 20}
+                  style={{ '--panel-index': index } as React.CSSProperties} />
+              ))}
+            </svg>
+          </div>
           <h1>
-            Formenos Is the Hedge Fund{' '}
-            <br className="hero-break" />
-            Run Like a{' '}
-            <span className="hide-mobile">Technology</span>
-            <span className="only-mobile">Tech</span> Company.
+            <span className="hero-title-desktop"><TitleLines text="Formenos Is the Hedge Fund|Run Like a Technology Company." /></span>
+            <span className="hero-title-mobile"><TitleLines text="Formenos Is the Hedge Fund|Run Like a Tech Company." /></span>
           </h1>
           <p className="hero-sub">
             <span className="home-subtitle-desktop">Built for the founders and investors in Silicon Valley.{' '}
               <br className="hero-break" />
               Dedicated to managing capital in public markets.</span>
             <span className="home-subtitle-mobile">
-              <span>Built for Silicon Valley’s founders and investors.</span>
-              <span>Dedicated to public markets.</span>
+              <TitleLines text="Built for Silicon Valley’s|founders and investors." />
             </span>
           </p>
           <div className="hero-actions">
