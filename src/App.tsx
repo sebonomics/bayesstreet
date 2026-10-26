@@ -153,6 +153,28 @@ function TitleLines({text}: {text:string}) {
   return <>{text.split('|').map(line=><span key={line}>{line}{' '}</span>)}</>
 }
 
+const mobileSectionTitles: Record<string, string> = {
+  'Built for Silicon Valley.|Focused on Public Markets.': 'Built for Silicon Valley.|Focused on Public Markets.',
+  'Backed by the First Investors in|Cursor, Cognition, Etched, and Aaru.': 'Our Investors.|Our Backing.',
+  'A Dedicated Investment Firm.|A Long-Term Commitment.': 'A Dedicated Firm.|A Long-Term Commitment.',
+  'A Clear Investment Mandate.|A Dedicated Public-Market Focus.': 'A Clear Mandate.|A Public-Market Focus.',
+  'Technology at the Foundation.|Responsibility at the Center.': 'Built on Technology.|Grounded in Responsibility.',
+  'A Long-Term Orientation.|A Focus on Investment Outcomes.': 'A Long-Term Perspective.|A Focus on Performance.',
+  'Building Companies Takes Focus.|Public Markets Require It, Too.': 'Building Companies.|Managing Public Capital.',
+  'A Separate Investment Focus.|A Complementary Relationship.': 'A Separate Focus.|A Complementary Role.',
+  'A Dedicated Investment Firm.|A Distinct Role Within a Portfolio.': 'A Dedicated Firm.|A Distinct Portfolio Role.',
+  'Built Within Silicon Valley.|Focused on Public Markets.': 'Built in Silicon Valley.|Focused on Public Markets.',
+  'Founders and Early-Stage Investors.|A Dedicated Investment Firm.': 'Founders and Investors.|A Dedicated Firm.',
+  'Based in Silicon Valley.|Serving Its Founders and Investors.': 'Based in Silicon Valley.|Serving Founders and Investors.',
+}
+
+function SectionTitle({ text }: { text: string }) {
+  return <h2 className="two-line-title">
+    <span className="section-title-desktop"><TitleLines text={text} /></span>
+    <span className="section-title-mobile"><TitleLines text={mobileSectionTitles[text] ?? text} /></span>
+  </h2>
+}
+
 function PageArtwork({name}: {name:string}) {
   return <div className="panel-visual page-artwork"><img src={`/images/riften/${name}.jpg`} alt={`${name.replace(/^\d+-/, '').replace(/-/g, ' ')} architectural artwork`} width="1672" height="941" loading="lazy" /></div>
 }
@@ -226,17 +248,17 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
     <section className="section split-panel" id={`${page}-approach`}>
       <PageArtwork name={content.image} />
       <div className="panel-rows">
-        <div className="panel-head"><h2 className="two-line-title"><TitleLines text={content.title} /></h2></div>
+        <div className="panel-head"><SectionTitle text={content.title} /></div>
         {content.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}
       </div>
     </section>
     <section className="section split-panel split-panel--mirror">
-      <div className="panel-rows"><div className="panel-head"><h2 className="two-line-title"><TitleLines text={process.title} /></h2></div>{process.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
+      <div className="panel-rows"><div className="panel-head"><SectionTitle text={process.title} /></div>{process.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
       <PageArtwork name={page === 'research' ? '10-vault' : page === 'strategy' ? '17-pass' : '16-garden'} />
     </section>
     <section className="section split-panel">
       <PageArtwork name={content.secondImage} />
-      <div className="panel-rows"><div className="panel-head"><h2 className="two-line-title"><TitleLines text={content.secondTitle} /></h2></div>{content.secondRows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
+      <div className="panel-rows"><div className="panel-head"><SectionTitle text={content.secondTitle} /></div>{content.secondRows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
     </section>
   </>
 }
@@ -347,7 +369,7 @@ function App() {
 
         <div className="panel-rows">
           <div className="panel-head">
-            <h2 className="two-line-title"><TitleLines text="Built for Silicon Valley.|Focused on Public Markets." /></h2>
+            <SectionTitle text="Built for Silicon Valley.|Focused on Public Markets." />
           </div>
           {pillars.map(([title, body]) => (
             <div className="panel-row" key={title}>
@@ -362,7 +384,7 @@ function App() {
       <section className="section split-panel split-panel--aligned split-panel--mirror" id="backing">
         <div className="panel-rows">
           <div className="panel-head">
-            <h2 className="two-line-title"><TitleLines text="Backed by the First Investors in|Cursor, Cognition, Etched, and Aaru." /></h2>
+            <SectionTitle text="Backed by the First Investors in|Cursor, Cognition, Etched, and Aaru." />
           </div>
           {trackRecord.map(([title, body]) => (
             <div className="panel-row" key={title}>
@@ -396,7 +418,7 @@ function App() {
         <PageArtwork name="monument-bridge" />
         <div className="panel-rows">
           <div className="panel-head">
-            <h2 className="two-line-title"><TitleLines text="A Dedicated Investment Firm.|A Long-Term Commitment." /></h2>
+            <SectionTitle text="A Dedicated Investment Firm.|A Long-Term Commitment." />
           </div>
           {strategy.map(([title, body]) => (
             <div className="panel-row" key={title}>

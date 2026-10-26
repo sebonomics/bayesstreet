@@ -2579,3 +2579,17 @@ body,.site-shell,.nav,.nav::before {background:var(--art-paper);}
  .home-subtitle-mobile {display:grid;gap:6px;}
  #overview .hero-sub {max-width:34ch;}
 }
+
+/* Section headings have a readable, consistent scale on narrow screens. */
+.two-line-title > .section-title-mobile {display:none;}
+.section-title-desktop > span {display:block;}
+@media(max-width:700px){
+ .two-line-title > .section-title-desktop {display:none;}
+ .two-line-title > .section-title-mobile {display:block;white-space:normal;}
+ .section-title-mobile > span {display:block;text-wrap:balance;}
+ .panel-head .two-line-title {font-size:clamp(19px,5.2vw,23px);line-height:1.25;margin:0;max-width:none;}
+ .panel-row h3 {line-height:1.4;text-wrap:balance;}
+ .panel-row p {margin-top:10px;text-wrap:pretty;}
+ .hero .hero-sub {max-width:100%;text-wrap:balance;}
+ .home-subtitle-mobile {gap:8px;}
+}
