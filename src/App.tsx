@@ -9,15 +9,15 @@ type PageId = 'home' | 'strategy' | 'research' | 'company'
 const SHOW_FULL_SITE = false
 
 const pillars: Array<[string, string]> = [
-  ['For Founders.', 'Dedicated public-market capital management for founders focused on building their companies.'],
+  ['For Founders.', 'Dedicated public-market capital management for founders focused on building and leading their companies.'],
   ['For Early-Stage Investors.', 'Public-market investing for early-stage investors focused on finding and supporting emerging companies.'],
 ]
 const strategy: Array<[string, string]> = [
-  ['A Dedicated Mandate.', 'Formenos manages public-market capital for the founders and investors in Silicon Valley.'],
-  ['A Long-Term Relationship.', 'The firm is focused on investment performance and its responsibilities to the investors who entrust it with capital.'],
+  ['A Dedicated Mandate.', 'Formenos manages public-market capital for Silicon Valley’s founders and investors through a dedicated fund.'],
+  ['A Long-Term Relationship.', 'The firm focuses on investment performance and a lasting relationship with the investors who entrust it with capital.'],
 ]
 const trackRecord: Array<[string, string]> = [
-  ['Backed by the People Behind the Tools.', 'We raised our last round from the first investors in Cursor, Cognition, Etched, and Aaru, along with angels from DoorDash and Palantir.'],
+  ['Backed by the People Behind the Tools.', 'Our round included the first investors in Cursor, Cognition, Etched, and Aaru, plus DoorDash and Palantir angels.'],
   ['Serving Founders and Investors.', 'Silicon Valley’s hedge fund: a dedicated public-market investment partner for founders and investors.'],
 ]
 
@@ -78,11 +78,11 @@ const detailPages = {
     "secondRows": [
       [
         "Investment Performance.",
-        "The objective is strong investment performance over time, with careful attention to the responsibilities of managing outside capital."
+        "The objective is strong investment performance over time, with a clear responsibility to the firm’s investors."
       ],
       [
         "A Long-Term Relationship.",
-        "Formenos serves as a public-market investment partner for founders and early-stage investors."
+        "Formenos serves as a long-term public-market investment partner for founders and early-stage investors."
       ]
     ]
   },
@@ -94,11 +94,11 @@ const detailPages = {
     "rows": [
       [
         "Founders.",
-        "Company building requires sustained attention to teams, products, and customers. Formenos provides a dedicated public-market investment relationship alongside those commitments."
+        "Formenos manages public-market capital for founders focused on their companies, teams, and customers."
       ],
       [
         "Early-Stage Investors.",
-        "Sourcing investments and supporting founders are substantial commitments. Formenos focuses on public equities for investors whose expertise and attention are concentrated in private markets."
+        "Formenos manages public-market capital for investors focused on finding, backing, and supporting private companies."
       ]
     ],
     "secondTitle": "A Dedicated Investment Firm.|A Distinct Role Within a Portfolio.",
@@ -106,11 +106,11 @@ const detailPages = {
     "secondRows": [
       [
         "Public-Market Capital.",
-        "Company ownership and early-stage investments have their own demands. Formenos manages public-market capital as a separate investment responsibility."
+        "Formenos manages public-market capital alongside the demands of company ownership and early-stage investing."
       ],
       [
         "Investor Inquiries.",
-        "Information about the fund and investor materials is available by contacting the firm."
+        "Prospective investors can contact the firm for information about Formenos and access to investor materials."
       ]
     ]
   },
@@ -122,11 +122,11 @@ const detailPages = {
     "rows": [
       [
         "A Specific Community.",
-        "Founders and early-stage investors devote their attention to building and backing companies. Formenos was built to serve the public-market investment needs of that community."
+        "Formenos serves the public-market investment needs of founders and investors building and backing companies."
       ],
       [
         "A Dedicated Investment Partner.",
-        "The firm provides a home for public-market capital alongside the businesses and private investments that occupy its investors’ time."
+        "A dedicated partner for public-market capital, alongside investors’ businesses and private investments."
       ]
     ],
     "secondTitle": "Based in Silicon Valley.|Serving Its Founders and Investors.",
@@ -134,7 +134,7 @@ const detailPages = {
     "secondRows": [
       [
         "Our Backing.",
-        "Formenos is backed by the first investors in Cursor, Cognition, Etched, and Aaru, along with angels from DoorDash and Palantir."
+        "Our backers include the first investors in Cursor, Cognition, Etched, and Aaru, plus DoorDash and Palantir angels."
       ],
       [
         "Our Purpose.",
@@ -185,11 +185,11 @@ const processCopy = {
     "rows": [
       [
         "An AI-Native Firm.",
-        "Technology is part of the firm’s foundation. Formenos combines that orientation with the responsibilities of managing investor capital."
+        "Technology is part of the firm’s foundation, alongside a long-term commitment to managing investor capital."
       ],
       [
         "Investment Judgment.",
-        "The firm remains accountable for its investment decisions and the capital entrusted to it."
+        "The firm takes responsibility for its investment decisions and the stewardship of capital entrusted to it."
       ]
     ]
   },
@@ -198,11 +198,11 @@ const processCopy = {
     "rows": [
       [
         "Dedicated Attention.",
-        "Public-market investing requires ongoing attention. Formenos takes on that work for the capital invested with the fund."
+        "Formenos brings dedicated attention to public markets and the capital its investors entrust to the fund."
       ],
       [
         "Clear Responsibilities.",
-        "Founders and investors remain focused on their businesses and private investments. Formenos is responsible for managing the capital entrusted to the firm."
+        "Investors focus on their businesses and private investments. Formenos manages the capital entrusted to the firm."
       ]
     ]
   },
@@ -211,11 +211,11 @@ const processCopy = {
     "rows": [
       [
         "Founders and Operators.",
-        "Company leadership involves hiring, product development, and serving customers. Formenos provides a public-market investment partner alongside those responsibilities."
+        "A public-market investment partner for founders whose attention remains on leading and growing their companies."
       ],
       [
         "Investors and Backers.",
-        "Early-stage investors spend their time identifying and supporting emerging companies. The firm serves their public-market investment needs."
+        "A public-market investment partner for early-stage investors focused on identifying and supporting companies."
       ]
     ]
   }

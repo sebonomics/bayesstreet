@@ -2628,3 +2628,15 @@ body,.site-shell,.nav,.nav::before {background:var(--art-paper);}
  .hero h1,.page-hero h1 {font-size:clamp(20px,6vw,32px);line-height:1.12;}
  .hero-title-mobile > span {display:block;}
 }
+
+/* Compact mobile footer with one consistent vertical rhythm. */
+@media(max-width:700px){
+ .site-footer {padding-top:36px;padding-bottom:24px;gap:24px;}
+ .footer-grid {gap:24px;width:100%;}
+ .footer-primary {gap:10px;}
+ .footer-brand .brand-wordmark {height:22px;width:auto;}
+ .site-footer p {margin:0;font-size:13px;line-height:1.5;}
+ .footer-bottom {margin-top:0;padding-top:0;gap:10px;font-size:12px;line-height:1.5;}
+ .footer-bottom div {gap:20px;flex-wrap:wrap;}
+ .footer-bottom div span {font-size:12px;}
+}
