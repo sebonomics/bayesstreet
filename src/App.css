@@ -2593,3 +2593,6 @@ body,.site-shell,.nav,.nav::before {background:var(--art-paper);}
  .hero .hero-sub {max-width:100%;text-wrap:balance;}
  .home-subtitle-mobile {gap:8px;}
 }
+
+/* Let the final content section flow into the black footer. */
+.app-shell > .split-panel:last-child {border-bottom:0;}
