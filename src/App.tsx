@@ -1,111 +1,25 @@
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import { WinRateBarChart } from './components/FundCharts'
 
-type PageId = 'home' | 'strategy' | 'returns' | 'research' | 'risk' | 'company' | 'investors' | 'contact'
+type PageId = 'home' | 'strategy' | 'research' | 'company'
 
 // The Monthly Returns / fund-facts sections this once gated no longer exist in this file;
 // all that remains behind the flag are the nav and footer links that pointed at them.
 const SHOW_FULL_SITE = false
 
-// All body copy below is the manifesto verbatim. Headings and section labels are
-// editorial framing only — no claims beyond what the copy states.
 const pillars: Array<[string, string]> = [
-  [
-    'Agents do the reading.',
-    'Research runs continuously, covering far more ground than a desk of analysts could, and surfacing only what is worth a decision.',
-  ],
-  [
-    'A lean shop by design.',
-    'A small team with deep internal tooling, built to stay that way. We add software before we add headcount.',
-  ],
+  ['For Founders.', 'Dedicated public-market capital management for founders focused on building their companies.'],
+  ['For Early-Stage Investors.', 'Public-market investing for early-stage investors focused on finding and supporting emerging companies.'],
 ]
-
 const strategy: Array<[string, string]> = [
-  [
-    'Multiple strategies, one book.',
-    'Several strategies run alongside one another across public markets, expressed through a single coherent book.',
-  ],
-  [
-    'Consistent and hedged.',
-    'Built for returns that hold up across different regimes, with risk managed deliberately rather than left to chance.',
-  ],
+  ['A Dedicated Mandate.', 'Formenos manages public-market capital for the founders and investors in Silicon Valley.'],
+  ['A Long-Term Relationship.', 'The firm is focused on investment performance and its responsibilities to the investors who entrust it with capital.'],
 ]
-
 const trackRecord: Array<[string, string]> = [
-  [
-    'Backed by the people behind the tools.',
-    'We raised our last round from the first investors in Cursor, Cognition, and Etched, along with angels from DoorDash and Kalshi.',
-  ],
-  [
-    'Measured against the incumbents.',
-    'Early results have compared favourably with firms many times our size and many times our headcount.',
-  ],
+  ['Backed by the People Behind the Tools.', 'We raised our last round from the first investors in Cursor, Cognition, Etched, and Aaru, along with angels from DoorDash and Palantir.'],
+  ['Serving Founders and Investors.', 'Silicon Valley’s hedge fund: a dedicated public-market investment partner for founders and investors.'],
 ]
-
-const BAR_COUNT = 46
-
-// A fixed pseudo-signal — deterministic so the shape is stable across renders.
-const BAR_BASE = Array.from({ length: BAR_COUNT }, (_, i) => {
-  const a =
-    Math.sin(i * 0.55) * 0.5 + Math.sin(i * 1.7 + 1.2) * 0.26 + Math.sin(i * 0.31 + 2.4) * 0.24
-  return 0.22 + ((a + 1) / 2) * 0.4
-})
-
-// ── hero backdrop: Monte Carlo ─────────────────────────────────────────────
-// The picture a fund actually works inside: a few hundred simulated price paths
-// diverging from a single point, with the confidence cone drawn over them. Every
-// path is a random walk with a small upward drift, evaluated once at module scope
-// from a seeded LCG so the fan is deterministic — identical on every render.
-// The apex sits low and left of centre and the cone opens up and to the right, so
-// the narrow end stays under the copy and the flare lands in open frame. The apex
-// has to be visible — masked off, a fan just reads as a band.
-const FAN = { w: 1600, h: 620, steps: 110, paths: 200 }
-const FAN_X0 = 150
-const FAN_Y0 = 580
-const FAN_DX = (FAN.w - FAN_X0) / FAN.steps
-const FAN_VOL = 8 // per-step standard deviation, in viewBox units
-const FAN_DRIFT = -2.6 // negative is up: the edge, applied evenly across the walk
-
-function seeded(seed: number) {
-  let s = seed
-  return () => {
-    s = (s * 1103515245 + 12345) % 2147483648
-    return s / 2147483648
-  }
-}
-
-// Sum of three uniforms — a cheap, good-enough normal. Box–Muller would be more
-// correct and completely invisible at this scale.
-function walk(seed: number) {
-  const next = seeded(seed)
-  const out: string[] = [`M${FAN_X0} ${FAN_Y0}`]
-  let y = FAN_Y0
-  for (let i = 1; i <= FAN.steps; i++) {
-    y += FAN_DRIFT + (next() + next() + next() - 1.5) * FAN_VOL
-    out.push(`L${(FAN_X0 + i * FAN_DX).toFixed(1)} ${y.toFixed(1)}`)
-  }
-  return out.join(' ')
-}
-
-const FAN_PATHS = Array.from({ length: FAN.paths }, (_, i) => walk(i * 7919 + 13))
-
-// A handful pulled out of the cloud and drawn hot, so the eye has somewhere to go
-const FAN_LIT = [17, 46, 88, 134, 171]
-const FAN_REALISED = walk(FAN.paths * 7919 + 13)
-
-// ±1σ and ±2σ. Dispersion grows with the square root of time, which is what gives
-// the cone its flare — the one piece of the image that isn't random.
-const FAN_ENVELOPES = [1, -1, 2, -2].map((k) => {
-  const out: string[] = []
-  for (let i = 0; i <= 60; i++) {
-    const step = (i / 60) * FAN.steps
-    const y = FAN_Y0 + FAN_DRIFT * step + k * FAN_VOL * Math.sqrt(step)
-    out.push(`${i ? 'L' : 'M'}${(FAN_X0 + step * FAN_DX).toFixed(1)} ${y.toFixed(1)}`)
-  }
-  return out.join(' ')
-})
 
 // [name, logo file, optical scale] — logo is optional; cells fall back to the wordmark
 // as text. Scale trims wordmark-only logos, which otherwise read far larger than logos
@@ -115,16 +29,17 @@ const investors: Array<[string, string | null, number?]> = [
   ['Cognition', '/logos/cognition.png'],
   ['Etched', '/logos/etched.png', 0.78],
   ['DoorDash', '/logos/doordash.png', 0.64],
-  ['Kalshi', '/logos/kalshi.png', 0.6],
+  ['Palantir', '/logos/palantir.svg', 0.82],
   ['Aaru', '/logos/aaru.png', 0.82],
 ]
 
 const CONTACT_EMAIL = 'sebastian@formenos.ai'
 
 const navLinks = [
-  { label: 'Fund', href: '#how' },
-  { label: 'Strategy', href: '#strategy' },
-  { label: 'Backing', href: '#backing' },
+  { label: 'Fund', href: '#overview' },
+  { label: 'Approach', href: '#/research' },
+  { label: 'Investors', href: '#/strategy' },
+  { label: 'Firm', href: '#/company' },
 ]
 
 const footerColumns = SHOW_FULL_SITE
@@ -142,283 +57,199 @@ const footerColumns = SHOW_FULL_SITE
 // no destinations for these yet — rendered as plain text, not links
 const footerBottomLinks = ['Terms', 'Privacy', 'Disclosures']
 
-const detailPages: Record<
-  Exclude<PageId, 'home'>,
-  {
-    eyebrow: string
-    title: string
-    subtitle: string
-    rows: Array<[string, string]>
-    sections: Array<{ title: string; body: string }>
+const detailPages = {
+  "research": {
+    "heroTitle": "A Dedicated Focus on Public Markets.|An Independent Investment Perspective.",
+    "heroSubtitle": "An AI-native hedge fund serving founders and early-stage investors.|Focused on managing public-market capital over the long term.",
+    "title": "A Clear Investment Mandate.|A Dedicated Public-Market Focus.",
+    "image": "03-observatory",
+    "rows": [
+      [
+        "Public Markets.",
+        "Formenos manages capital in public equities for founders and investors whose principal commitments lie elsewhere."
+      ],
+      [
+        "Independent Perspective.",
+        "The firm brings a distinct investment perspective to the public-market portion of its investors’ capital."
+      ]
+    ],
+    "secondTitle": "A Long-Term Orientation.|A Focus on Investment Outcomes.",
+    "secondImage": "12-library",
+    "secondRows": [
+      [
+        "Investment Performance.",
+        "The objective is strong investment performance over time, with careful attention to the responsibilities of managing outside capital."
+      ],
+      [
+        "A Long-Term Relationship.",
+        "Formenos serves as a public-market investment partner for founders and early-stage investors."
+      ]
+    ]
+  },
+  "strategy": {
+    "heroTitle": "Public-Market Investing.|For Founders and Early-Stage Investors.",
+    "heroSubtitle": "Building companies and backing founders demand sustained attention.|Formenos provides dedicated management of public-market capital.",
+    "title": "Building Companies Takes Focus.|Public Markets Require It, Too.",
+    "image": "01-confluence",
+    "rows": [
+      [
+        "Founders.",
+        "Company building requires sustained attention to teams, products, and customers. Formenos provides a dedicated public-market investment relationship alongside those commitments."
+      ],
+      [
+        "Early-Stage Investors.",
+        "Sourcing investments and supporting founders are substantial commitments. Formenos focuses on public equities for investors whose expertise and attention are concentrated in private markets."
+      ]
+    ],
+    "secondTitle": "A Dedicated Investment Firm.|A Distinct Role Within a Portfolio.",
+    "secondImage": "20-foundation",
+    "secondRows": [
+      [
+        "Public-Market Capital.",
+        "Company ownership and early-stage investments have their own demands. Formenos manages public-market capital as a separate investment responsibility."
+      ],
+      [
+        "Investor Inquiries.",
+        "Information about the fund and investor materials is available by contacting the firm."
+      ]
+    ]
+  },
+  "company": {
+    "heroTitle": "Silicon Valley’s Hedge Fund.|For Founders and Investors.",
+    "heroSubtitle": "An investment firm serving Silicon Valley’s founders and investors.|Dedicated to managing capital in public markets.",
+    "title": "Built Within Silicon Valley.|Focused on Public Markets.",
+    "image": "monument-exterior",
+    "rows": [
+      [
+        "A Specific Community.",
+        "Founders and early-stage investors devote their attention to building and backing companies. Formenos was built to serve the public-market investment needs of that community."
+      ],
+      [
+        "A Dedicated Investment Partner.",
+        "The firm provides a home for public-market capital alongside the businesses and private investments that occupy its investors’ time."
+      ]
+    ],
+    "secondTitle": "Based in Silicon Valley.|Serving Its Founders and Investors.",
+    "secondImage": "13-island",
+    "secondRows": [
+      [
+        "Our Backing.",
+        "Formenos is backed by the first investors in Cursor, Cognition, Etched, and Aaru, along with angels from DoorDash and Palantir."
+      ],
+      [
+        "Our Purpose.",
+        "A dedicated public-market investment firm for Silicon Valley, with a long-term commitment to its investors."
+      ]
+    ]
   }
-> = {
-  strategy: {
-    eyebrow: 'Strategy',
-    title: 'Concentrated Conviction Plays',
-    subtitle:
-      'Formenos starts with a macro view, identifies secular shifts, then expresses the view through a small number of high-conviction liquid securities.',
-    rows: [
-      ['Core Style', 'Macro-driven security selection'],
-      ['Positioning', 'Conviction-weighted, 10-30 core names'],
-      ['Primary Edge', 'Asymmetric risk/reward and deep relative value'],
-      ['Themes', 'AI infrastructure, mega-cap dominance, special situations'],
-    ],
-    sections: [
-      {
-        title: 'Macro View First',
-        body:
-          'We begin with the regime: rates, liquidity, earnings revisions, capital expenditure cycles, and investor positioning.',
-      },
-      {
-        title: 'Security Selection Second',
-        body:
-          'Once the theme is clear, agents and analysts search for the best equity expression instead of diversifying across weak proxies.',
-      },
-      {
-        title: 'Sizing Follows Conviction',
-        body:
-          'The best ideas get meaningful capital. Low-conviction ideas do not stay in the book just for diversification.',
-      },
-    ],
-  },
-  returns: {
-    eyebrow: 'Returns',
-    title: 'Six-Month Return History',
-    subtitle:
-      'The complete tested history consists of six monthly returns, shown as a compounded growth series.',
-    rows: [
-      ['Net P&L', '+12.77%'],
-      ['Tested History', '6 months'],
-      ['Best Month', '+12.23%'],
-      ['Worst Month', '-5.04%'],
-    ],
-    sections: [
-      {
-        title: 'Measured On Compounded Results',
-        body:
-          'Monthly gains and losses are compounded to show the actual change in portfolio value over the tested period.',
-      },
-      {
-        title: 'Return Quality Matters',
-        body:
-          'We care about the path of returns: drawdown, exposure, liquidity, and whether gains came from the thesis we underwrote.',
-      },
-    ],
-  },
-  research: {
-    eyebrow: 'Research',
-    title: 'AI-Native Research Engine',
-    subtitle:
-      'Autonomous agents read filings, transcripts, news, macro data, price action, and alternative datasets to surface mispricings faster.',
-    rows: [
-      ['Coverage', 'Public liquid equities'],
-      ['Inputs', 'Filings, transcripts, pricing, macro, sentiment'],
-      ['Output', 'Ranked theses and risk/reward maps'],
-      ['Human Role', 'Judgment, sizing, and risk review'],
-    ],
-    sections: [
-      {
-        title: 'Secular Trend Identification',
-        body:
-          'Agents monitor structural shifts like AI capex, compute demand, software consolidation, and margin expansion.',
-      },
-      {
-        title: 'Special Situations',
-        body:
-          'The system flags catalysts where consensus may be slow: spin-offs, revisions, regulatory changes, and capital returns.',
-      },
-      {
-        title: 'Deep Relative Value',
-        body:
-          'We compare quality, growth, balance sheet, and multiple dispersion to find mispricings inside mega-cap universes.',
-      },
-    ],
-  },
-  risk: {
-    eyebrow: 'Risk',
-    title: 'Asymmetric Positioning With Hard Limits',
-    subtitle:
-      'The fund is built to take concentrated risk only when upside/downside, liquidity, and thesis durability are clear.',
-    rows: [
-      ['Target Setup', '3:1 upside/downside'],
-      ['Position Sizing', 'Conviction-weighted'],
-      ['Risk Controls', 'Exposure, liquidity, drawdown, thesis breakpoints'],
-      ['Hedges', 'Macro hedges and cash when risk/reward weakens'],
-    ],
-    sections: [
-      {
-        title: 'Know What Breaks The Thesis',
-        body:
-          'Every major position carries explicit invalidation points before capital is deployed.',
-      },
-      {
-        title: 'Opportunistic Allocation',
-        body:
-          'Capital can move between sectors, themes, cash, and hedges when the opportunity set changes.',
-      },
-    ],
-  },
-  company: {
-    eyebrow: 'Company',
-    title: 'We Are An AI-Native Hedge Fund',
-    subtitle:
-      'Formenos combines investing judgment with software, agents, and systematic risk controls to build a modern concentrated hedge fund.',
-    rows: [
-      ['Built For', 'Public market alpha'],
-      ['Approach', 'Macro view to concentrated stock picks'],
-      ['Team Shape', 'Investing, engineering, data, risk'],
-      ['Principle', 'Fewer, better ideas'],
-    ],
-    sections: [
-      {
-        title: 'AI-Native From The Ground Up',
-        body:
-          'The research process is not a spreadsheet with AI bolted on. Agents are part of sourcing, monitoring, and thesis review.',
-      },
-      {
-        title: 'Human Judgment Stays Central',
-        body:
-          'AI expands coverage and speed. Humans own portfolio construction, risk, and final capital allocation.',
-      },
-    ],
-  },
-  investors: {
-    eyebrow: 'Investors',
-    title: 'Materials For Qualified Investors',
-    subtitle:
-      'Investor materials are available for qualified investors seeking concentrated AI-native public-market exposure.',
-    rows: [
-      ['Available Materials', 'Strategy overview, risk framework, exposure summary'],
-      ['Investor Type', 'Qualified investors and institutions'],
-      ['Reporting', 'Positioning, themes, risk, and attribution'],
-      ['Contact', 'Request access to materials'],
-    ],
-    sections: [
-      {
-        title: 'Designed For Capital Partners',
-        body:
-          'The strategy is built for investors who understand concentration, volatility, and opportunistic allocation.',
-      },
-      {
-        title: 'Clear Reporting',
-        body:
-          'We explain what we own, why we own it, what can go wrong, and what changed in the thesis.',
-      },
-    ],
-  },
-  contact: {
-    eyebrow: 'Contact',
-    title: 'Talk to Formenos',
-    subtitle:
-      'Request investor materials, ask about the strategy, or discuss whether the fund fits your mandate.',
-    rows: [
-      ['Email', 'investors@formenos.ai'],
-      ['Focus', 'AI-native concentrated hedge fund'],
-      ['Investor Type', 'Qualified investors'],
-      ['Materials', 'Available by request'],
-    ],
-    sections: [
-      {
-        title: 'What To Include',
-        body:
-          'Share your investor type, mandate, time horizon, and what materials you want to review.',
-      },
-    ],
-  },
 }
 
 function getPageFromHash(): PageId {
-  return 'home'
+  const route = window.location.hash.replace('#/', '').replace(/^#/, '').replace(/-approach$/, '')
+  return route === 'research' || route === 'strategy' || route === 'company' ? route : 'home'
+}
+
+function TitleLines({text}: {text:string}) {
+  return <>{text.split('|').map(line=><span key={line}>{line}{' '}</span>)}</>
+}
+
+function PageArtwork({name}: {name:string}) {
+  return <div className="panel-visual page-artwork"><img src={`/images/riften/${name}.jpg`} alt={`${name.replace(/^\d+-/, '').replace(/-/g, ' ')} architectural artwork`} width="1672" height="941" loading="lazy" /></div>
+}
+
+const processCopy = {
+  "research": {
+    "title": "Technology at the Foundation.|Responsibility at the Center.",
+    "rows": [
+      [
+        "An AI-Native Firm.",
+        "Technology is part of the firm’s foundation. Formenos combines that orientation with the responsibilities of managing investor capital."
+      ],
+      [
+        "Investment Judgment.",
+        "The firm remains accountable for its investment decisions and the capital entrusted to it."
+      ]
+    ]
+  },
+  "strategy": {
+    "title": "A Separate Investment Focus.|A Complementary Relationship.",
+    "rows": [
+      [
+        "Dedicated Attention.",
+        "Public-market investing requires ongoing attention. Formenos takes on that work for the capital invested with the fund."
+      ],
+      [
+        "Clear Responsibilities.",
+        "Founders and investors remain focused on their businesses and private investments. Formenos is responsible for managing the capital entrusted to the firm."
+      ]
+    ]
+  },
+  "company": {
+    "title": "Founders and Early-Stage Investors.|A Dedicated Investment Firm.",
+    "rows": [
+      [
+        "Founders and Operators.",
+        "Company leadership involves hiring, product development, and serving customers. Formenos provides a public-market investment partner alongside those responsibilities."
+      ],
+      [
+        "Investors and Backers.",
+        "Early-stage investors spend their time identifying and supporting emerging companies. The firm serves their public-market investment needs."
+      ]
+    ]
+  }
+}
+
+const mobileHeroTitles = {
+  research: 'An Independent Approach|to Public Markets.',
+  strategy: 'Public-Market Investing|for Founders and Investors.',
+  company: 'Silicon Valley’s|Hedge Fund.',
+}
+
+const mobileHeroSubtitles = {
+  research: 'An AI-native hedge fund focused on public markets.',
+  strategy: 'Public-market investing for founders and early-stage investors.',
+  company: 'A public-market investment firm serving Silicon Valley.',
 }
 
 function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
   const content = detailPages[page]
-  const visualBars =
-    page === 'returns'
-      ? [
-          ['January', '+0.93%', 0.93],
-          ['February', '-5.04%', 5.04],
-          ['March', '-2.86%', 2.86],
-          ['April', '+12.23%', 12.23],
-          ['May', '+11.46%', 11.46],
-          ['June', '-3.17%', 3.17],
-        ]
-      : [
-          ['Macro Signal', '72%', 72],
-          ['Security Selection', '84%', 84],
-          ['Risk Discipline', '64%', 64],
-          ['Execution Edge', '58%', 58],
-        ]
-
-  return (
-    <>
-      <section className="section detail-hero">
-        <div className="detail-hero-copy">
-          <span className="page-eyebrow">{content.eyebrow}</span>
-          <h1>{content.title}</h1>
-          <p>{content.subtitle}</p>
-        </div>
-        <div className="detail-facts-table">
-          {content.rows.map(([label, value]) => (
-            <div className="overview-row" key={label}>
-              <span>{label}</span>
-              <strong>{value}</strong>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="section detail-split">
-        <div>
-          <h2>{page === 'company' ? 'Who We Are' : 'What We Do'}</h2>
-          <p>
-            We are an AI-native hedge fund built to turn macro views into concentrated,
-            conviction-weighted public-market positions. The process combines autonomous research
-            coverage with human judgment around sizing, risk, and thesis quality.
-          </p>
-        </div>
-        <div className="detail-card-grid">
-          {content.sections.map((section) => (
-            <article className="detail-card" key={section.title}>
-              <h3>{section.title}</h3>
-              <p>{section.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section detail-visual-section">
-        <WinRateBarChart
-          data={visualBars.map(([label, value, amount]) => ({
-            label: String(label),
-            value: String(value),
-            amount: Number(amount),
-          }))}
-          title={page === 'returns' ? 'Win-Rates Across Investment Periods' : 'Operating Edge'}
-        />
-        <div className="detail-visual-copy">
-          <h2>{page === 'returns' ? 'Outperformance Over Time As A Result' : 'Built For Fewer, Better Ideas'}</h2>
-          <p>
-            The goal is not to own everything. It is to identify the small number of situations
-            where macro setup, security selection, and asymmetric risk/reward line up.
-          </p>
-          <p>
-            AI expands the research surface area, but capital allocation remains concentrated,
-            explainable, and risk-aware.
-          </p>
-        </div>
-      </section>
-    </>
-  )
+  const process = processCopy[page]
+  return <>
+    <section className="section hero page-hero">
+      <h1><span className="hero-title-desktop"><TitleLines text={content.heroTitle} /></span><span className="hero-title-mobile"><TitleLines text={mobileHeroTitles[page]} /></span></h1>
+      <p className="hero-sub">
+        <span className="hero-subtitle-desktop"><TitleLines text={content.heroSubtitle} /></span>
+        <span className="hero-subtitle-mobile">{mobileHeroSubtitles[page]}</span>
+      </p>
+      <div className="hero-actions"><a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>Get in touch</a><a className="button button-secondary" href={`#${page}-approach`}>Learn more</a></div>
+    </section>
+    <section className="section split-panel" id={`${page}-approach`}>
+      <PageArtwork name={content.image} />
+      <div className="panel-rows">
+        <div className="panel-head"><h2 className="two-line-title"><TitleLines text={content.title} /></h2></div>
+        {content.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}
+      </div>
+    </section>
+    <section className="section split-panel split-panel--mirror">
+      <div className="panel-rows"><div className="panel-head"><h2 className="two-line-title"><TitleLines text={process.title} /></h2></div>{process.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
+      <PageArtwork name={page === 'research' ? '10-vault' : page === 'strategy' ? '17-pass' : '16-garden'} />
+    </section>
+    <section className="section split-panel">
+      <PageArtwork name={content.secondImage} />
+      <div className="panel-rows"><div className="panel-head"><h2 className="two-line-title"><TitleLines text={content.secondTitle} /></h2></div>{content.secondRows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
+    </section>
+  </>
 }
 
 function App() {
-  const [pointer, setPointer] = useState<number | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuButton = useRef<HTMLButtonElement>(null)
   const [showAnnouncement, setShowAnnouncement] = useState(true)
   const [page, setPage] = useState<PageId>(() => getPageFromHash())
 
   useEffect(() => {
     function syncPage() {
+      setMenuOpen(false)
       setPage(getPageFromHash())
       const targetId = window.location.hash.replace(/^#/, '')
       const target = targetId && !targetId.startsWith('/') ? document.getElementById(targetId) : null
@@ -451,23 +282,25 @@ function App() {
       ) : null}
 
       <div className="site-shell">
-        <header className="nav">
+        <header className={`nav ${menuOpen ? 'nav--expanded' : ''}`} onKeyDown={event => {if(event.key === 'Escape' && menuOpen){setMenuOpen(false);menuButton.current?.focus()}}}>
           <a className="brand" href="#overview" aria-label="Formenos home">
             <img className="brand-wordmark" src="/formenos-logo.png" alt="Formenos" />
           </a>
 
           {navLinks.length > 0 ? (
-            <nav className="nav-links" aria-label="Primary navigation">
+            <nav id="primary-navigation" className="nav-links" aria-label="Primary navigation" onClick={()=>setMenuOpen(false)}>
               {navLinks.map((menu) => (
                 <div className="nav-item" key={menu.label}>
-                  <a className="nav-trigger" href={menu.href}>
+                  <a className="nav-trigger" href={menu.href} aria-current={(page === 'home' ? menu.href === '#overview' : menu.href === `#/${page}`) ? 'page' : undefined}>
                     {menu.label}
                   </a>
                 </div>
               ))}
+              <a className="mobile-contact" href={`mailto:${CONTACT_EMAIL}`}>Contact <span aria-hidden="true">↗</span></a>
             </nav>
           ) : null}
 
+          <button ref={menuButton} className="mobile-nav-button" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} aria-controls="primary-navigation" onClick={()=>setMenuOpen(!menuOpen)}><span className="menu-icon" aria-hidden="true"><i /><i /></span></button>
           <div className="nav-actions">
             <a className="button button-secondary" href={`mailto:${CONTACT_EMAIL}`}>
               Contact
@@ -481,42 +314,21 @@ function App() {
             <>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="section hero" id="overview">
-          {/* full-bleed backdrop — decorative, sits behind the copy */}
-          <div className="hero-backdrop" aria-hidden="true">
-            <span className="hero-sky" />
-
-            {/* The simulation, stretched edge to edge. `none` on preserveAspectRatio
-                is deliberate: the walk has no natural aspect, and stretching pins the
-                origin to the left edge and the flare to the right at every width. */}
-            <svg
-              className="hero-fan"
-              preserveAspectRatio="none"
-              viewBox={`0 0 ${FAN.w} ${FAN.h}`}
-            >
-              <g className="fan-cloud">
-                {FAN_PATHS.map((d, i) => (
-                  <path className={FAN_LIT.includes(i) ? 'fan-lit' : undefined} d={d} key={i} />
-                ))}
-              </g>
-              <g className="fan-envelope">
-                {FAN_ENVELOPES.map((d) => (
-                  <path d={d} key={d} />
-                ))}
-              </g>
-              <path className="fan-realised" d={FAN_REALISED} />
-            </svg>
-          </div>
           <h1>
-            Formenos is the hedge fund{' '}
+            Formenos Is the Hedge Fund{' '}
             <br className="hero-break" />
-            run like a{' '}
-            <span className="hide-mobile">technology</span>
-            <span className="only-mobile">tech</span> company.
+            Run Like a{' '}
+            <span className="hide-mobile">Technology</span>
+            <span className="only-mobile">Tech</span> Company.
           </h1>
           <p className="hero-sub">
-            We&rsquo;re an AI-native hedge fund and research lab{' '}
-            <br className="hero-break" />
-            post-training frontier models into a market edge.
+            <span className="home-subtitle-desktop">Built for the founders and investors in Silicon Valley.{' '}
+              <br className="hero-break" />
+              Dedicated to managing capital in public markets.</span>
+            <span className="home-subtitle-mobile">
+              <span>Built for Silicon Valley’s founders and investors.</span>
+              <span>Dedicated to public markets.</span>
+            </span>
           </p>
           <div className="hero-actions">
             <a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>
@@ -531,41 +343,11 @@ function App() {
 
       {/* ── Pipeline: diagram + pillars ───────────────────────────────────── */}
       <section className="section split-panel" id="how">
-        <div className="panel-visual" aria-hidden="true">
-          <div
-            className="signal"
-            onMouseLeave={() => setPointer(null)}
-            onMouseMove={(e) => {
-              const r = e.currentTarget.getBoundingClientRect()
-              setPointer(((e.clientX - r.left) / r.width) * (BAR_COUNT - 1))
-            }}
-          >
-            {BAR_BASE.map((base, i) => {
-              // distance from the cursor drives both height and how lit the bar is,
-              // applied per bar so a bar is always fully coloured or not at all
-              const d = pointer === null ? Math.abs(i - (BAR_COUNT - 1) / 2) : Math.abs(i - pointer)
-              const reach = pointer === null ? 9 : 6
-              const lift = Math.max(0, 1 - d / reach)
-              const eased = lift * lift
-              return (
-                <i
-                  className="bar"
-                  key={i}
-                  style={
-                    {
-                      height: `${(base + eased * 0.34) * 100}%`,
-                      '--lit': pointer === null ? eased * 0.5 : eased,
-                    } as React.CSSProperties
-                  }
-                />
-              )
-            })}
-          </div>
-        </div>
+        <PageArtwork name="monument-interior" />
 
         <div className="panel-rows">
           <div className="panel-head">
-            <h2>Agents do the research. People make the decisions.</h2>
+            <h2 className="two-line-title"><TitleLines text="Built for Silicon Valley.|Focused on Public Markets." /></h2>
           </div>
           {pillars.map(([title, body]) => (
             <div className="panel-row" key={title}>
@@ -576,33 +358,20 @@ function App() {
         </div>
       </section>
 
-      {/* ── Strategy: rows left, feedback-loop visual right ───────────────── */}
-      <section className="section split-panel split-panel--mirror" id="strategy">
+      {/* ── Backing: mark left, rows right ──────────────────────────────── */}
+      <section className="section split-panel split-panel--aligned split-panel--mirror" id="backing">
         <div className="panel-rows">
           <div className="panel-head">
-            <h2>Many strategies, hedged into one consistent book.</h2>
+            <h2 className="two-line-title"><TitleLines text="Backed by the First Investors in|Cursor, Cognition, Etched, and Aaru." /></h2>
           </div>
-          {strategy.map(([title, body]) => (
+          {trackRecord.map(([title, body]) => (
             <div className="panel-row" key={title}>
               <h3>{title}</h3>
               <p>{body}</p>
             </div>
           ))}
         </div>
-        <div className="panel-visual panel-visual--loop" aria-hidden="true">
-          <div className="loop">
-            <div className="loop-frame">
-              <div className="loop-mark">
-                <img src="/favicon.png" alt="" />
-              </div>
-            </div>
-          </div>
-        </div>
 
-      </section>
-
-      {/* ── Backing: mark left, rows right ──────────────────────────────── */}
-      <section className="section split-panel split-panel--aligned" id="backing">
         <div className="panel-visual logo-wall">
           <div className="logo-grid">
             {investors.map(([name, logo, scale]) => (
@@ -620,11 +389,16 @@ function App() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* ── Strategy: artwork left, rows right ───────────────── */}
+      <section className="section split-panel" id="strategy">
+        <PageArtwork name="monument-bridge" />
         <div className="panel-rows">
           <div className="panel-head">
-            <h2>Backed by the first investors in Cursor, Cognition, and Etched.</h2>
+            <h2 className="two-line-title"><TitleLines text="A Dedicated Investment Firm.|A Long-Term Commitment." /></h2>
           </div>
-          {trackRecord.map(([title, body]) => (
+          {strategy.map(([title, body]) => (
             <div className="panel-row" key={title}>
               <h3>{title}</h3>
               <p>{body}</p>
@@ -633,6 +407,7 @@ function App() {
         </div>
 
       </section>
+
 
             </>
           ) : (
@@ -644,11 +419,10 @@ function App() {
         <div className="footer-grid">
           <div className="footer-primary">
             <a className="brand footer-brand" href="#overview">
-              <img className="brand-wordmark" src="/formenos-logo-light.png" alt="Formenos" />
+              <img className="brand-wordmark" src="/formenos-logo.png" alt="Formenos" />
             </a>
             <p>
-              AI-native concentrated hedge fund built around macro-driven security selection,
-              asymmetric positioning, and conviction-weighted capital allocation.
+              The AI-Native Hedge Fund
             </p>
           </div>
 
