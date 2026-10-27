@@ -115,7 +115,7 @@ const detailPages = {
     ]
   },
   "company": {
-    "heroTitle": "Silicon Valley’s Hedge Fund.|For Founders and Investors.",
+    "heroTitle": "The Hedge Fund|For Silicon Valley",
     "heroSubtitle": "An investment firm serving Silicon Valley’s founders and investors.|Dedicated to managing capital in public markets.",
     "title": "Built Within Silicon Valley.|Focused on Public Markets.",
     "image": "monument-exterior",
@@ -175,25 +175,12 @@ function SectionTitle({ text }: { text: string }) {
   </h2>
 }
 
-const mobileArtwork: Record<string, string> = {
-  '03-observatory': '02-archive',
-  '12-library': 'monument-archive',
-  '01-confluence': '11-suspended',
-  '20-foundation': '08-water',
-  'monument-exterior': '06-threshold',
-  '10-vault': '18-chamber',
-  '17-pass': '15-descent',
-  '16-garden': '19-colonnade',
-}
-
 function PageArtwork({name}: {name:string}) {
-  return <div className="panel-visual page-artwork"><picture>
-    {mobileArtwork[name] && <source media="(max-width: 700px)" srcSet={`/images/riften/${mobileArtwork[name]}.jpg`} />}
-    <img src={`/images/riften/${name}.jpg`} alt="Monochrome architectural study" width="1672" height="941" loading="lazy" />
-  </picture></div>
+  return <div className="panel-visual page-artwork"><img src={`/images/riften/${name}.jpg`} alt="Monochrome architectural study" width="1672" height="941" loading="lazy" /></div>
 }
 
-function MobileArtwork({ name, fortress = false }: { name: string; fortress?: boolean }) {
+function MobileArtwork({ name }: { name: string }) {
+  const fortress = name === 'ribbed-citadel-v2' || name === 'white-bastion'
   return <div className="mobile-artwork">
     <img src={`/images/${fortress ? 'fortresses' : 'riften'}/${name}.${fortress ? 'png' : 'jpg'}`}
       alt={`${name.replace(/^\d+-/, '').replace(/-v\d+$/, '').replace(/-/g, ' ')} architectural artwork`}
@@ -246,7 +233,7 @@ const processCopy = {
 const mobileHeroTitles = {
   research: 'An Independent Approach|to Public Markets.',
   strategy: 'Public-Market Investing|for Founders and Investors.',
-  company: 'Silicon Valley’s|Hedge Fund.',
+  company: 'The Hedge Fund|For Silicon Valley',
 }
 
 const mobileHeroSubtitles = {
@@ -271,17 +258,16 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
       <PageArtwork name={content.image} />
       <div className="panel-rows">
         <div className="panel-head"><SectionTitle text={content.title} /></div>
-        {content.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}
+        {content.rows.map(([title,body], index)=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p><MobileArtwork name={(page === 'research' ? ['04-stair', '02-archive'] : page === 'strategy' ? ['09-horizon', '11-suspended'] : ['white-bastion', '06-threshold'])[index]} /></div>)}
       </div>
-      <MobileArtwork name={page === 'research' ? '04-stair' : page === 'strategy' ? '09-horizon' : 'white-bastion'} fortress={page === 'company'} />
     </section>
     <section className="section split-panel split-panel--mirror">
-      <div className="panel-rows"><div className="panel-head"><SectionTitle text={process.title} /></div>{process.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
+      <div className="panel-rows"><div className="panel-head"><SectionTitle text={process.title} /></div>{process.rows.map(([title,body], index)=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p><MobileArtwork name={(page === 'research' ? ['18-chamber', '10-vault'] : page === 'strategy' ? ['15-descent', '17-pass'] : ['19-colonnade', '16-garden'])[index]} /></div>)}</div>
       <PageArtwork name={page === 'research' ? '10-vault' : page === 'strategy' ? '17-pass' : '16-garden'} />
     </section>
     <section className="section split-panel">
       <PageArtwork name={content.secondImage} />
-      <div className="panel-rows"><div className="panel-head"><SectionTitle text={content.secondTitle} /></div>{content.secondRows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
+      <div className="panel-rows"><div className="panel-head"><SectionTitle text={content.secondTitle} /></div>{content.secondRows.map(([title,body], index)=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p><MobileArtwork name={(page === 'research' ? ['monument-archive', '12-library'] : page === 'strategy' ? ['08-water', '20-foundation'] : ['13-island', 'monument-exterior'])[index]} /></div>)}</div>
     </section>
   </>
 }
@@ -313,7 +299,6 @@ function App() {
   return (
     <>
       <div className="announcement">
-        <img className="announcement-mark" src="/favicon.png" alt="" />
         <span className="announcement-copy-desktop">Formenos is building the AI-Native Hedge Fund</span>
         <span className="announcement-copy-mobile">Building the AI-Native Hedge Fund</span>
         <a href="#/company" aria-label="Learn More about Formenos"><span className="announcement-link-label">Learn More</span><span aria-hidden="true">↗</span></a>
@@ -383,14 +368,14 @@ function App() {
           <div className="panel-head">
             <SectionTitle text="Built for Silicon Valley.|Focused on Public Markets." />
           </div>
-          {pillars.map(([title, body]) => (
+          {pillars.map(([title, body], index) => (
             <div className="panel-row" key={title}>
               <h3>{title}</h3>
               <p>{body}</p>
+              <MobileArtwork name={["ribbed-citadel-v2", "monument-interior"][index]} />
             </div>
           ))}
         </div>
-        <MobileArtwork name="ribbed-citadel-v2" fortress />
       </section>
 
       {/* ── Backing: mark left, rows right ──────────────────────────────── */}
@@ -399,10 +384,11 @@ function App() {
           <div className="panel-head">
             <SectionTitle text="Backed by the First Investors in|Cursor, Cognition, Etched, and Aaru." />
           </div>
-          {trackRecord.map(([title, body]) => (
+          {trackRecord.map(([title, body], index) => (
             <div className="panel-row" key={title}>
               <h3>{title}</h3>
               <p>{body}</p>
+              {index === 0 && <MobileArtwork name="02-archive" />}
             </div>
           ))}
         </div>
@@ -433,10 +419,11 @@ function App() {
           <div className="panel-head">
             <SectionTitle text="A Dedicated Investment Firm.|A Long-Term Commitment." />
           </div>
-          {strategy.map(([title, body]) => (
+          {strategy.map(([title, body], index) => (
             <div className="panel-row" key={title}>
               <h3>{title}</h3>
               <p>{body}</p>
+              <MobileArtwork name={["white-bastion", "monument-bridge"][index]} />
             </div>
           ))}
         </div>
