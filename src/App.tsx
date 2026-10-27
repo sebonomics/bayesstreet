@@ -175,8 +175,18 @@ function SectionTitle({ text }: { text: string }) {
   </h2>
 }
 
-function PageArtwork({name}: {name:string}) {
-  return <div className="panel-visual page-artwork"><img src={`/images/riften/${name}.jpg`} alt={`${name.replace(/^\d+-/, '').replace(/-/g, ' ')} architectural artwork`} width="1672" height="941" loading="lazy" /></div>
+function ContentSection({ title, rows, id, children }: {
+  title: string; rows: string[][]; id?: string; children?: React.ReactNode
+}) {
+  return <section className="content-section" id={id}>
+    <div className="content-section-copy">
+      <SectionTitle text={title} />
+      <div className="content-section-rows">{rows.map(([heading, body]) => <div key={heading}>
+        <h3>{heading}</h3><p>{body}</p>
+      </div>)}</div>
+    </div>
+    {children}
+  </section>
 }
 
 function ImageInterlude({ name, fortress = false }: { name: string; fortress?: boolean }) {
@@ -253,22 +263,13 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
       </p>
       <div className="hero-actions"><a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>Get in touch</a><a className="button button-secondary" href={`#${page}-approach`}>Learn more</a></div>
     </section>
-    <section className="section split-panel" id={`${page}-approach`}>
-      <PageArtwork name={content.image} />
-      <div className="panel-rows">
-        <div className="panel-head"><SectionTitle text={content.title} /></div>
-        {content.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}
-      </div>
-    </section>
+    <ImageInterlude name={content.image} />
+    <ContentSection id={`${page}-approach`} title={content.title} rows={content.rows} />
     <ImageInterlude name={page === 'research' ? '04-stair' : page === 'strategy' ? '09-horizon' : 'white-bastion'} fortress={page === 'company'} />
-    <section className="section split-panel split-panel--mirror">
-      <div className="panel-rows"><div className="panel-head"><SectionTitle text={process.title} /></div>{process.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
-      <PageArtwork name={page === 'research' ? '18-chamber' : page === 'strategy' ? '15-descent' : '19-colonnade'} />
-    </section>
-    <section className="section split-panel">
-      <PageArtwork name={content.secondImage} />
-      <div className="panel-rows"><div className="panel-head"><SectionTitle text={content.secondTitle} /></div>{content.secondRows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
-    </section>
+    <ContentSection title={process.title} rows={process.rows} />
+    <ImageInterlude name={page === 'research' ? '18-chamber' : page === 'strategy' ? '15-descent' : '19-colonnade'} />
+    <ContentSection title={content.secondTitle} rows={content.secondRows} />
+    <ImageInterlude name={content.secondImage} />
   </>
 }
 
@@ -361,75 +362,18 @@ function App() {
 
       </section>
 
-      {/* ── Pipeline: diagram + pillars ───────────────────────────────────── */}
-      <section className="section split-panel" id="how">
-        <PageArtwork name="monument-interior" />
-
-        <div className="panel-rows">
-          <div className="panel-head">
-            <SectionTitle text="Built for Silicon Valley.|Focused on Public Markets." />
-          </div>
-          {pillars.map(([title, body]) => (
-            <div className="panel-row" key={title}>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
+      <ImageInterlude name="monument-interior" />
+      <ContentSection id="how" title="Built for Silicon Valley.|Focused on Public Markets." rows={pillars} />
       <ImageInterlude name="ribbed-citadel-v2" fortress />
-
-      {/* ── Backing: mark left, rows right ──────────────────────────────── */}
-      <section className="section split-panel split-panel--aligned split-panel--mirror" id="backing">
-        <div className="panel-rows">
-          <div className="panel-head">
-            <SectionTitle text="Backed by the First Investors in|Cursor, Cognition, Etched, and Aaru." />
-          </div>
-          {trackRecord.map(([title, body]) => (
-            <div className="panel-row" key={title}>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </div>
-          ))}
+      <ContentSection id="backing" title="Backed by the First Investors in|Cursor, Cognition, Etched, and Aaru." rows={trackRecord}>
+        <div className="content-logos" aria-label="Companies associated with our investors">
+          {investors.map(([name, logo, scale]) => <div key={name}>
+            {logo ? <img alt={name} src={logo} style={scale ? ({ '--logo-scale': scale } as React.CSSProperties) : undefined} /> : <span>{name}</span>}
+          </div>)}
         </div>
-
-        <div className="panel-visual logo-wall">
-          <div className="logo-grid">
-            {investors.map(([name, logo, scale]) => (
-              <div className="logo-cell" key={name}>
-                {logo ? (
-                  <img
-                    alt={name}
-                    src={logo}
-                    style={scale ? ({ '--logo-scale': scale } as React.CSSProperties) : undefined}
-                  />
-                ) : (
-                  <span>{name}</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Strategy: artwork left, rows right ───────────────── */}
-      <section className="section split-panel" id="strategy">
-        <PageArtwork name="monument-bridge" />
-        <div className="panel-rows">
-          <div className="panel-head">
-            <SectionTitle text="A Dedicated Investment Firm.|A Long-Term Commitment." />
-          </div>
-          {strategy.map(([title, body]) => (
-            <div className="panel-row" key={title}>
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </div>
-          ))}
-        </div>
-
-      </section>
-
+      </ContentSection>
+      <ImageInterlude name="monument-bridge" />
+      <ContentSection id="strategy" title="A Dedicated Investment Firm.|A Long-Term Commitment." rows={strategy} />
 
             </>
 
