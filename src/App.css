@@ -2624,25 +2624,16 @@ body,.site-shell,.nav,.nav::before {background:var(--art-paper);}
  .footer-bottom div span {font-size:12px;}
 }
 
-/* Alternating full-width text and artwork sections. */
-.image-interlude {margin:0;overflow:hidden;background:#0b0b0b;}
-.image-interlude img {display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:contain;}
-.content-section {padding:0;scroll-margin-top:80px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-.content-section-copy {display:block;}
-.content-section .two-line-title {padding:32px var(--shell-gutter);border-bottom:1px solid var(--line);margin:0;color:#f0eee7;font-size:clamp(22px,2.2vw,30px);font-weight:500;line-height:1.25;letter-spacing:-.035em;}
-.content-section .two-line-title span {white-space:normal;}
-.content-section-rows {display:grid;gap:0;}
-.content-section-rows>div {padding:28px var(--shell-gutter);}
-.content-section-rows>div+div {border-top:1px solid var(--line);}
-.content-section-rows h3 {font-size:15px;font-weight:500;line-height:1.4;margin:0;color:#f0eee7;}
-.content-section-rows p {font-size:14px;line-height:1.75;margin:10px 0 0;color:#aaa9a2;max-width:55ch;}
-.content-logos {display:flex;align-items:center;justify-content:space-between;gap:28px;margin-top:0;padding:32px var(--shell-gutter);border-top:1px solid var(--line);}
-.content-logos>div {display:flex;align-items:center;justify-content:center;min-width:0;flex:1;}
-.content-logos img {display:block;max-width:100%;max-height:calc(24px * var(--logo-scale,1));object-fit:contain;filter:grayscale(1) invert(1);mix-blend-mode:screen;}
+/* Additional artwork appears only in the mobile composition. */
+.page-artwork picture {display:contents;}
+.mobile-artwork {display:none;}
 @media(max-width:700px){
-  .content-section .two-line-title {padding:28px var(--shell-gutter);}
+  .mobile-artwork {display:block;margin:0;background:#0b0b0b;grid-column:1/-1;order:1;}
+  .mobile-artwork img {display:block;width:100%;height:auto;}
+}
 
-  .content-section .two-line-title {font-size:23px;}
-  .content-section-rows>div {padding:24px var(--shell-gutter);}
-  .content-logos {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 24px;margin-top:0;}
+@media(max-width:700px){
+  .split-panel .panel-visual {order:3;}
+  .split-panel .panel-row {order:0;}
+  .split-panel:has(> .mobile-artwork) .panel-row:nth-child(3) {order:2;}
 }

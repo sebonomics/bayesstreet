@@ -62,7 +62,7 @@ const detailPages = {
     "heroTitle": "A Dedicated Focus on Public Markets.|An Independent Investment Perspective.",
     "heroSubtitle": "An AI-native hedge fund serving founders and early-stage investors.|Focused on managing public-market capital over the long term.",
     "title": "A Clear Investment Mandate.|A Dedicated Public-Market Focus.",
-    "image": "02-archive",
+    "image": "03-observatory",
     "rows": [
       [
         "Public Markets.",
@@ -74,7 +74,7 @@ const detailPages = {
       ]
     ],
     "secondTitle": "A Long-Term Orientation.|A Focus on Investment Outcomes.",
-    "secondImage": "monument-archive",
+    "secondImage": "12-library",
     "secondRows": [
       [
         "Investment Performance.",
@@ -90,7 +90,7 @@ const detailPages = {
     "heroTitle": "Public-Market Investing.|For Founders and Early-Stage Investors.",
     "heroSubtitle": "Building companies and backing founders demand sustained attention.|Formenos provides dedicated management of public-market capital.",
     "title": "Building Companies Takes Focus.|Public Markets Require It, Too.",
-    "image": "11-suspended",
+    "image": "01-confluence",
     "rows": [
       [
         "Founders.",
@@ -102,7 +102,7 @@ const detailPages = {
       ]
     ],
     "secondTitle": "A Dedicated Investment Firm.|A Distinct Role Within a Portfolio.",
-    "secondImage": "08-water",
+    "secondImage": "20-foundation",
     "secondRows": [
       [
         "Public-Market Capital.",
@@ -118,7 +118,7 @@ const detailPages = {
     "heroTitle": "Silicon Valley’s Hedge Fund.|For Founders and Investors.",
     "heroSubtitle": "An investment firm serving Silicon Valley’s founders and investors.|Dedicated to managing capital in public markets.",
     "title": "Built Within Silicon Valley.|Focused on Public Markets.",
-    "image": "06-threshold",
+    "image": "monument-exterior",
     "rows": [
       [
         "A Specific Community.",
@@ -175,22 +175,26 @@ function SectionTitle({ text }: { text: string }) {
   </h2>
 }
 
-function ContentSection({ title, rows, id, children }: {
-  title: string; rows: string[][]; id?: string; children?: React.ReactNode
-}) {
-  return <section className="content-section" id={id}>
-    <div className="content-section-copy">
-      <SectionTitle text={title} />
-      <div className="content-section-rows">{rows.map(([heading, body]) => <div key={heading}>
-        <h3>{heading}</h3><p>{body}</p>
-      </div>)}</div>
-    </div>
-    {children}
-  </section>
+const mobileArtwork: Record<string, string> = {
+  '03-observatory': '02-archive',
+  '12-library': 'monument-archive',
+  '01-confluence': '11-suspended',
+  '20-foundation': '08-water',
+  'monument-exterior': '06-threshold',
+  '10-vault': '18-chamber',
+  '17-pass': '15-descent',
+  '16-garden': '19-colonnade',
 }
 
-function ImageInterlude({ name, fortress = false }: { name: string; fortress?: boolean }) {
-  return <div className="image-interlude">
+function PageArtwork({name}: {name:string}) {
+  return <div className="panel-visual page-artwork"><picture>
+    {mobileArtwork[name] && <source media="(max-width: 700px)" srcSet={`/images/riften/${mobileArtwork[name]}.jpg`} />}
+    <img src={`/images/riften/${name}.jpg`} alt="Monochrome architectural study" width="1672" height="941" loading="lazy" />
+  </picture></div>
+}
+
+function MobileArtwork({ name, fortress = false }: { name: string; fortress?: boolean }) {
+  return <div className="mobile-artwork">
     <img src={`/images/${fortress ? 'fortresses' : 'riften'}/${name}.${fortress ? 'png' : 'jpg'}`}
       alt={`${name.replace(/^\d+-/, '').replace(/-v\d+$/, '').replace(/-/g, ' ')} architectural artwork`}
       width="1672" height="941" loading="lazy" decoding="async" />
@@ -261,15 +265,24 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
         <span className="hero-subtitle-desktop"><TitleLines text={content.heroSubtitle} /></span>
         <span className="hero-subtitle-mobile"><TitleLines text={mobileHeroSubtitles[page]} /></span>
       </p>
-      <div className="hero-actions"><a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>Get in touch</a><a className="button button-secondary" href={`#${page}-approach`}>Learn more</a></div>
+      <div className="hero-actions"><a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>Get in touch</a><a className="button button-secondary" href={`#${page}-approach`}>Learn More</a></div>
     </section>
-    <ImageInterlude name={content.image} />
-    <ContentSection id={`${page}-approach`} title={content.title} rows={content.rows} />
-    <ImageInterlude name={page === 'research' ? '04-stair' : page === 'strategy' ? '09-horizon' : 'white-bastion'} fortress={page === 'company'} />
-    <ContentSection title={process.title} rows={process.rows} />
-    <ImageInterlude name={page === 'research' ? '18-chamber' : page === 'strategy' ? '15-descent' : '19-colonnade'} />
-    <ContentSection title={content.secondTitle} rows={content.secondRows} />
-    <ImageInterlude name={content.secondImage} />
+    <section className="section split-panel" id={`${page}-approach`}>
+      <PageArtwork name={content.image} />
+      <div className="panel-rows">
+        <div className="panel-head"><SectionTitle text={content.title} /></div>
+        {content.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}
+      </div>
+      <MobileArtwork name={page === 'research' ? '04-stair' : page === 'strategy' ? '09-horizon' : 'white-bastion'} fortress={page === 'company'} />
+    </section>
+    <section className="section split-panel split-panel--mirror">
+      <div className="panel-rows"><div className="panel-head"><SectionTitle text={process.title} /></div>{process.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
+      <PageArtwork name={page === 'research' ? '10-vault' : page === 'strategy' ? '17-pass' : '16-garden'} />
+    </section>
+    <section className="section split-panel">
+      <PageArtwork name={content.secondImage} />
+      <div className="panel-rows"><div className="panel-head"><SectionTitle text={content.secondTitle} /></div>{content.secondRows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
+    </section>
   </>
 }
 
@@ -303,7 +316,7 @@ function App() {
         <img className="announcement-mark" src="/favicon.png" alt="" />
         <span className="announcement-copy-desktop">Formenos is building the AI-Native Hedge Fund</span>
         <span className="announcement-copy-mobile">Building the AI-Native Hedge Fund</span>
-        <a href="#/company" aria-label="Learn more about Formenos"><span className="announcement-link-label">Learn more</span><span aria-hidden="true">↗</span></a>
+        <a href="#/company" aria-label="Learn More about Formenos"><span className="announcement-link-label">Learn More</span><span aria-hidden="true">↗</span></a>
       </div>
 
       <div className="site-shell">
@@ -362,21 +375,76 @@ function App() {
 
       </section>
 
-      <ImageInterlude name="monument-interior" />
-      <ContentSection id="how" title="Built for Silicon Valley.|Focused on Public Markets." rows={pillars} />
-      <ImageInterlude name="ribbed-citadel-v2" fortress />
-      <ContentSection id="backing" title="Backed by the First Investors in|Cursor, Cognition, Etched, and Aaru." rows={trackRecord}>
-        <div className="content-logos" aria-label="Companies associated with our investors">
-          {investors.map(([name, logo, scale]) => <div key={name}>
-            {logo ? <img alt={name} src={logo} style={scale ? ({ '--logo-scale': scale } as React.CSSProperties) : undefined} /> : <span>{name}</span>}
-          </div>)}
+      {/* ── Pipeline: diagram + pillars ───────────────────────────────────── */}
+      <section className="section split-panel" id="how">
+        <PageArtwork name="monument-interior" />
+
+        <div className="panel-rows">
+          <div className="panel-head">
+            <SectionTitle text="Built for Silicon Valley.|Focused on Public Markets." />
+          </div>
+          {pillars.map(([title, body]) => (
+            <div className="panel-row" key={title}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))}
         </div>
-      </ContentSection>
-      <ImageInterlude name="monument-bridge" />
-      <ContentSection id="strategy" title="A Dedicated Investment Firm.|A Long-Term Commitment." rows={strategy} />
+        <MobileArtwork name="ribbed-citadel-v2" fortress />
+      </section>
+
+      {/* ── Backing: mark left, rows right ──────────────────────────────── */}
+      <section className="section split-panel split-panel--aligned split-panel--mirror" id="backing">
+        <div className="panel-rows">
+          <div className="panel-head">
+            <SectionTitle text="Backed by the First Investors in|Cursor, Cognition, Etched, and Aaru." />
+          </div>
+          {trackRecord.map(([title, body]) => (
+            <div className="panel-row" key={title}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="panel-visual logo-wall">
+          <div className="logo-grid">
+            {investors.map(([name, logo, scale]) => (
+              <div className="logo-cell" key={name}>
+                {logo ? (
+                  <img
+                    alt={name}
+                    src={logo}
+                    style={scale ? ({ '--logo-scale': scale } as React.CSSProperties) : undefined}
+                  />
+                ) : (
+                  <span>{name}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Strategy: artwork left, rows right ───────────────── */}
+      <section className="section split-panel" id="strategy">
+        <PageArtwork name="monument-bridge" />
+        <div className="panel-rows">
+          <div className="panel-head">
+            <SectionTitle text="A Dedicated Investment Firm.|A Long-Term Commitment." />
+          </div>
+          {strategy.map(([title, body]) => (
+            <div className="panel-row" key={title}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))}
+        </div>
+
+      </section>
+
 
             </>
-
           ) : (
             <DetailPage page={page} />
           )}
