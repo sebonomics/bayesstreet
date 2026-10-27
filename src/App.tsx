@@ -1,6 +1,7 @@
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import { HeroGeometry } from './components/HeroGeometry'
 
 type PageId = 'home' | 'strategy' | 'research' | 'company'
 
@@ -266,7 +267,6 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuButton = useRef<HTMLButtonElement>(null)
-  const [showAnnouncement, setShowAnnouncement] = useState(true)
   const [page, setPage] = useState<PageId>(() => getPageFromHash())
 
   useEffect(() => {
@@ -290,18 +290,12 @@ function App() {
 
   return (
     <>
-      {showAnnouncement ? (
-        <div className="announcement">
-          <span>Formenos is building the AI-Native Hedge Fund</span>
-          <button
-            aria-label="Dismiss announcement"
-            onClick={() => setShowAnnouncement(false)}
-            type="button"
-          >
-            ×
-          </button>
-        </div>
-      ) : null}
+      <div className="announcement">
+        <img className="announcement-mark" src="/favicon.png" alt="" />
+        <span className="announcement-copy-desktop">Formenos is building the AI-Native Hedge Fund</span>
+        <span className="announcement-copy-mobile">Building the AI-Native Hedge Fund</span>
+        <a href="#/company" aria-label="Learn more about Formenos"><span className="announcement-link-label">Learn more</span><span aria-hidden="true">↗</span></a>
+      </div>
 
       <div className="site-shell">
         <header className={`nav ${menuOpen ? 'nav--expanded' : ''}`} onKeyDown={event => {if(event.key === 'Escape' && menuOpen){setMenuOpen(false);menuButton.current?.focus()}}}>
@@ -337,13 +331,7 @@ function App() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="section hero" id="overview">
           <div className="hero-panels" aria-hidden="true">
-            <svg viewBox="0 0 800 800" fill="none" focusable="false">
-              {Array.from({ length: 18 }, (_, index) => (
-                <rect key={index} x={90 + index * 13} y={90 + index * 10}
-                  width={510 - index * 16} height={590 - index * 20}
-                  style={{ '--panel-index': index } as React.CSSProperties} />
-              ))}
-            </svg>
+            <HeroGeometry />
           </div>
           <h1>
             <span className="hero-title-desktop"><TitleLines text="Formenos Is the Hedge Fund|Run Like a Technology Company." /></span>

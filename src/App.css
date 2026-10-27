@@ -1,42 +1,56 @@
 .announcement {
   align-items: center;
   background: var(--accent);
-  border-bottom: 1px solid var(--accent);
-  color: rgba(255, 255, 255, 0.78);
+  color: #ffffff;
   display: flex;
-  font-size: 0.73rem;
-  gap: 14px;
+  font-size: 16px;
+  gap: 16px;
   justify-content: center;
-  letter-spacing: -0.01em;
-  min-height: 28px;
-  padding: 6px 44px;
-  position: relative;
-  text-align: center;
+  letter-spacing: -0.02em;
+  min-height: 48px;
+  padding: 10px clamp(20px, 3.5vw, 60px);
+  line-height: 1.5;
 }
 
-.announcement strong {
-  color: #ffffff;
-  font-weight: 600;
+.announcement-mark {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  margin-right: 2px;
 }
 
 .announcement a {
-  color: #ffffff;
-  font-weight: 500;
+  align-items: center;
+  color: inherit;
+  display: inline-flex;
+  gap: 8px;
+  white-space: nowrap;
   text-decoration: none;
 }
 
-.announcement button {
-  background: transparent;
-  border: 0;
-  color: rgba(255, 255, 255, 0.82);
-  cursor: pointer;
-  font: inherit;
-  height: 22px;
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 22px;
+.announcement a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.announcement a:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
+
+.announcement a > span[aria-hidden] {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.announcement-copy-mobile {display:none;}
+@media(max-width:700px){
+  .announcement {gap:8px;min-height:44px;padding:0 12px;font-size:12px;white-space:nowrap;}
+  .announcement-copy-desktop,.announcement .announcement-link-label {display:none;}
+  .announcement-copy-mobile {display:inline;}
+  .announcement-mark {flex-basis:18px;width:18px;height:18px;margin-right:0;}
+  .announcement a {justify-content:center;min-width:24px;min-height:44px;}
+  .announcement a > span[aria-hidden] {font-size:18px;}
 }
 
 .site-shell {
@@ -1812,11 +1826,6 @@
     position: static;
   }
 
-  .announcement {
-    padding-left: 18px;
-    padding-right: 44px;
-  }
-
   .site-shell {
     width: min(100% - 24px, 1280px);
   }
@@ -2066,15 +2075,6 @@
     padding: 0 8px;
   }
 
-  .announcement {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 4px;
-    padding-bottom: 8px;
-    padding-top: 8px;
-    text-align: left;
-  }
-
   .copy-block h1,
   .home-hero h1,
   .overview-section h1,
@@ -2302,10 +2302,6 @@
 }
 
 @media (max-width: 560px) {
-  .announcement {
-    display: none;
-  }
-
   .home-hero h1 span {
     display: block;
   }
@@ -2344,7 +2340,7 @@
 }
 
 .announcement ~ .site-shell {
-  --announcement-height: 37px;
+  --announcement-height: 48px;
 }
 
 @media (max-width: 900px) {
@@ -2353,10 +2349,9 @@
   }
 }
 
-@media (max-width: 560px) {
-  /* the announcement is display:none at this width */
+@media (max-width: 700px) {
   .announcement ~ .site-shell {
-    --announcement-height: 0px;
+    --announcement-height: 44px;
   }
 }
 
@@ -2600,14 +2595,20 @@ body,.site-shell,.nav,.nav::before {background:var(--art-paper);}
 /* A quiet architectural motion study behind the fund hero. */
 #overview {position:relative;isolation:isolate;overflow:hidden;}
 #overview > h1,#overview > .hero-sub,#overview > .hero-actions {position:relative;z-index:1;}
-.hero-panels {position:absolute;inset:-18% -12% -25% 35%;z-index:0;pointer-events:none;mask-image:linear-gradient(90deg,transparent,#000 45%);}
-.hero-panels svg {width:100%;height:100%;overflow:visible;transform:rotate(-24deg) skewY(12deg);}
-.hero-panels rect {stroke:#fff;stroke-width:.7;fill:#ffffff02;transform-box:fill-box;transform-origin:center;opacity:.14;animation:panel-breathe 18s ease-in-out infinite;animation-delay:calc(var(--panel-index) * -.6s);}
-@keyframes panel-breathe {0%,100%{transform:translateY(-9px) rotate(-3deg);opacity:.09}50%{transform:translateY(9px) rotate(3deg);opacity:.24}}
-@media(max-width:700px){
- .hero-panels {inset:0 -65% -20% 28%;opacity:.55;mask-image:linear-gradient(90deg,transparent,#000 70%);}
+.hero-panels {
+  display:none;
 }
-@media(prefers-reduced-motion:reduce){.hero-panels rect{animation:none;opacity:.14;}}
+@media(min-width:1024px){
+  .hero-panels {
+    display:block;
+    position:absolute;
+    inset:8% -7% 8% 56%;
+    z-index:0;
+    pointer-events:none;
+    mask-image:linear-gradient(90deg,transparent,#000 38%);
+  }
+  .hero-panels svg {display:block;width:100%;height:100%;}
+}
 
 /* One compact supporting statement beneath every mobile hero. */
 @media(max-width:700px){
