@@ -3,19 +3,19 @@
   background: var(--accent);
   color: #ffffff;
   display: flex;
-  font-size: 16px;
-  gap: 16px;
+  font-size: 13px;
+  gap: 12px;
   justify-content: center;
   letter-spacing: -0.02em;
-  min-height: 48px;
-  padding: 10px clamp(20px, 3.5vw, 60px);
+  min-height: 36px;
+  padding: 6px clamp(20px, 3.5vw, 60px);
   line-height: 1.5;
 }
 
 .announcement-mark {
-  flex: 0 0 24px;
-  width: 24px;
-  height: 24px;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
   margin-right: 2px;
 }
 
@@ -39,17 +39,17 @@
 }
 
 .announcement a > span[aria-hidden] {
-  font-size: 22px;
+  font-size: 18px;
   line-height: 1;
 }
 
 .announcement-copy-mobile {display:none;}
 @media(max-width:700px){
-  .announcement {gap:8px;min-height:44px;padding:0 12px;font-size:12px;white-space:nowrap;}
+  .announcement {gap:8px;min-height:36px;padding:0 12px;font-size:12px;white-space:nowrap;}
   .announcement-copy-desktop,.announcement .announcement-link-label {display:none;}
   .announcement-copy-mobile {display:inline;}
   .announcement-mark {flex-basis:18px;width:18px;height:18px;margin-right:0;}
-  .announcement a {justify-content:center;min-width:24px;min-height:44px;}
+  .announcement a {justify-content:center;min-width:32px;min-height:36px;}
   .announcement a > span[aria-hidden] {font-size:18px;}
 }
 
@@ -2340,7 +2340,7 @@
 }
 
 .announcement ~ .site-shell {
-  --announcement-height: 48px;
+  --announcement-height: 36px;
 }
 
 @media (max-width: 900px) {
@@ -2351,7 +2351,7 @@
 
 @media (max-width: 700px) {
   .announcement ~ .site-shell {
-    --announcement-height: 44px;
+    --announcement-height: 36px;
   }
 }
 
