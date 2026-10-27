@@ -62,7 +62,7 @@ const detailPages = {
     "heroTitle": "A Dedicated Focus on Public Markets.|An Independent Investment Perspective.",
     "heroSubtitle": "An AI-native hedge fund serving founders and early-stage investors.|Focused on managing public-market capital over the long term.",
     "title": "A Clear Investment Mandate.|A Dedicated Public-Market Focus.",
-    "image": "03-observatory",
+    "image": "02-archive",
     "rows": [
       [
         "Public Markets.",
@@ -74,7 +74,7 @@ const detailPages = {
       ]
     ],
     "secondTitle": "A Long-Term Orientation.|A Focus on Investment Outcomes.",
-    "secondImage": "12-library",
+    "secondImage": "monument-archive",
     "secondRows": [
       [
         "Investment Performance.",
@@ -90,7 +90,7 @@ const detailPages = {
     "heroTitle": "Public-Market Investing.|For Founders and Early-Stage Investors.",
     "heroSubtitle": "Building companies and backing founders demand sustained attention.|Formenos provides dedicated management of public-market capital.",
     "title": "Building Companies Takes Focus.|Public Markets Require It, Too.",
-    "image": "01-confluence",
+    "image": "11-suspended",
     "rows": [
       [
         "Founders.",
@@ -102,7 +102,7 @@ const detailPages = {
       ]
     ],
     "secondTitle": "A Dedicated Investment Firm.|A Distinct Role Within a Portfolio.",
-    "secondImage": "20-foundation",
+    "secondImage": "08-water",
     "secondRows": [
       [
         "Public-Market Capital.",
@@ -118,7 +118,7 @@ const detailPages = {
     "heroTitle": "Silicon Valley’s Hedge Fund.|For Founders and Investors.",
     "heroSubtitle": "An investment firm serving Silicon Valley’s founders and investors.|Dedicated to managing capital in public markets.",
     "title": "Built Within Silicon Valley.|Focused on Public Markets.",
-    "image": "monument-exterior",
+    "image": "06-threshold",
     "rows": [
       [
         "A Specific Community.",
@@ -177,6 +177,14 @@ function SectionTitle({ text }: { text: string }) {
 
 function PageArtwork({name}: {name:string}) {
   return <div className="panel-visual page-artwork"><img src={`/images/riften/${name}.jpg`} alt={`${name.replace(/^\d+-/, '').replace(/-/g, ' ')} architectural artwork`} width="1672" height="941" loading="lazy" /></div>
+}
+
+function ImageInterlude({ name, fortress = false }: { name: string; fortress?: boolean }) {
+  return <div className="image-interlude">
+    <img src={`/images/${fortress ? 'fortresses' : 'riften'}/${name}.${fortress ? 'png' : 'jpg'}`}
+      alt={`${name.replace(/^\d+-/, '').replace(/-v\d+$/, '').replace(/-/g, ' ')} architectural artwork`}
+      width="1672" height="941" loading="lazy" decoding="async" />
+  </div>
 }
 
 const processCopy = {
@@ -252,9 +260,10 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
         {content.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}
       </div>
     </section>
+    <ImageInterlude name={page === 'research' ? '04-stair' : page === 'strategy' ? '09-horizon' : 'white-bastion'} fortress={page === 'company'} />
     <section className="section split-panel split-panel--mirror">
       <div className="panel-rows"><div className="panel-head"><SectionTitle text={process.title} /></div>{process.rows.map(([title,body])=><div className="panel-row" key={title}><h3>{title}</h3><p>{body}</p></div>)}</div>
-      <PageArtwork name={page === 'research' ? '10-vault' : page === 'strategy' ? '17-pass' : '16-garden'} />
+      <PageArtwork name={page === 'research' ? '18-chamber' : page === 'strategy' ? '15-descent' : '19-colonnade'} />
     </section>
     <section className="section split-panel">
       <PageArtwork name={content.secondImage} />
@@ -369,6 +378,8 @@ function App() {
         </div>
       </section>
 
+      <ImageInterlude name="ribbed-citadel-v2" fortress />
+
       {/* ── Backing: mark left, rows right ──────────────────────────────── */}
       <section className="section split-panel split-panel--aligned split-panel--mirror" id="backing">
         <div className="panel-rows">
@@ -421,6 +432,7 @@ function App() {
 
 
             </>
+
           ) : (
             <DetailPage page={page} />
           )}
