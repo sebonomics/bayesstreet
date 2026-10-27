@@ -1,7 +1,6 @@
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import { HeroGeometry } from './components/HeroGeometry'
 
 type PageId = 'home' | 'strategy' | 'research' | 'company'
 
@@ -330,9 +329,6 @@ function App() {
             <>
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="section hero" id="overview">
-          <div className="hero-panels" aria-hidden="true">
-            <HeroGeometry />
-          </div>
           <h1>
             <span className="hero-title-desktop"><TitleLines text="Formenos Is the Hedge Fund|Run Like a Technology Company." /></span>
             <span className="hero-title-mobile"><TitleLines text="Formenos Is the Hedge Fund|Run Like a Tech Company." /></span>

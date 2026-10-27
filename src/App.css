@@ -2592,24 +2592,6 @@ body,.site-shell,.nav,.nav::before {background:var(--art-paper);}
 /* Let the final content section flow into the black footer. */
 .app-shell > .split-panel:last-child {border-bottom:0;}
 
-/* A quiet architectural motion study behind the fund hero. */
-#overview {position:relative;isolation:isolate;overflow:hidden;}
-#overview > h1,#overview > .hero-sub,#overview > .hero-actions {position:relative;z-index:1;}
-.hero-panels {
-  display:none;
-}
-@media(min-width:1024px){
-  .hero-panels {
-    display:block;
-    position:absolute;
-    inset:8% -7% 8% 56%;
-    z-index:0;
-    pointer-events:none;
-    mask-image:linear-gradient(90deg,transparent,#000 38%);
-  }
-  .hero-panels svg {display:block;width:100%;height:100%;}
-}
-
 /* One compact supporting statement beneath every mobile hero. */
 @media(max-width:700px){
  .hero .hero-sub,#overview .hero-sub {max-width:36ch;margin-top:20px;font-size:15px;line-height:1.5;text-wrap:balance;}
