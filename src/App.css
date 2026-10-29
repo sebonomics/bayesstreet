@@ -2716,3 +2716,37 @@ body,.site-shell,.nav,.nav::before {background:var(--art-paper);}
 
 /* Close the navigation row along the same inset frame as the page. */
 .site-shell > .nav::after { border-bottom: 1px solid var(--frame-line); }
+
+/* Mobile menu continues the page frame with four equal, full-width rows. */
+@media (max-width: 899px) {
+  .site-shell .nav > .nav-links {
+    left: var(--shell-gutter);
+    right: var(--shell-gutter);
+    top: 100%;
+    transform: none;
+    padding: 0;
+    gap: 0;
+    border: 1px solid var(--frame-line);
+    border-top: 0;
+    background: var(--art-paper);
+    box-shadow: none;
+    max-height: calc(100dvh - 112px);
+    overflow-y: auto;
+    animation: none;
+  }
+  .site-shell .nav-links .nav-item { margin: 0; padding: 0; }
+  .site-shell .nav-links .nav-trigger {
+    min-height: 64px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--frame-line);
+    border-radius: 0;
+    font-size: 17px;
+    line-height: 1.5;
+    letter-spacing: -0.02em;
+  }
+  .site-shell .nav-links .nav-item:last-child .nav-trigger { border-bottom: 0; }
+  .site-shell .nav-links .nav-trigger:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -5px;
+  }
+}

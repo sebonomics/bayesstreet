@@ -327,7 +327,6 @@ function App() {
                   </a>
                 </div>
               ))}
-              <a className="mobile-contact" href={`mailto:${CONTACT_EMAIL}`}>Contact <span aria-hidden="true">↗</span></a>
             </nav>
           ) : null}
 
