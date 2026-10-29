@@ -1,34 +1,34 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <script>
-      // Apply the saved theme before the first paint; dark remains the default.
+      // Apply the saved theme before the first paint; light is the default.
       try {
-        document.documentElement.dataset.theme = localStorage.getItem('formenos-theme') === 'light' ? 'light' : 'dark'
+        document.documentElement.dataset.theme = localStorage.getItem('formenos-theme') === 'dark' ? 'dark' : 'light'
       } catch {
-        document.documentElement.dataset.theme = 'dark'
+        document.documentElement.dataset.theme = 'light'
       }
     </script>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Formenos — AI-Native Hedge Fund</title>
+    <title>Formenos Technologies</title>
     <meta
       name="description"
-      content="The AI-Native Hedge Fund for the founders and investors in Silicon Valley."
+      content="Formenos is an AI-native hedge fund managing public-market capital for Silicon Valley founders and early-stage investors. Discover our firm and approach."
     />
     <link rel="canonical" href="https://formenos.ai/" />
-    <meta name="theme-color" content="#02030a" />
+    <meta name="theme-color" content="#fafaf7" />
 
     <!-- Open Graph: what Slack, LinkedIn, iMessage and Facebook read -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Formenos" />
     <meta property="og:url" content="https://formenos.ai/" />
-    <meta property="og:title" content="Formenos — AI-Native Hedge Fund" />
+    <meta property="og:title" content="Formenos Technologies" />
     <meta
       property="og:description"
-      content="The AI-Native Hedge Fund for the founders and investors in Silicon Valley."
+      content="Formenos is an AI-native hedge fund managing public-market capital for Silicon Valley founders and early-stage investors. Discover our firm and approach."
     />
     <meta property="og:image" content="https://formenos.ai/formenos-logo.png" />
     <meta property="og:image:alt" content="Formenos" />
@@ -36,24 +36,16 @@
     <!-- summary, not summary_large_image: the image below is a wordmark, not a
          1200×630 card. Swap both when a real card exists. -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Formenos — AI-Native Hedge Fund" />
+    <meta name="twitter:title" content="Formenos Technologies" />
     <meta
       name="twitter:description"
-      content="The AI-Native Hedge Fund for the founders and investors in Silicon Valley."
+      content="Formenos is an AI-native hedge fund managing public-market capital for Silicon Valley founders and early-stage investors. Discover our firm and approach."
     />
+    <meta name="twitter:image:alt" content="Formenos" />
     <meta name="twitter:image" content="https://formenos.ai/formenos-logo.png" />
   </head>
   <body>
     <div id="root"></div>
-    <!-- The app renders client-side, so a crawler that doesn't run JavaScript sees
-         an empty root. This gives it something true to read. -->
-    <noscript>
-      <h1>Formenos is the hedge fund run like a technology company.</h1>
-      <p>
-        Built for the founders and investors in Silicon Valley. Dedicated to managing capital in public markets.
-      </p>
-      <p><a href="mailto:sebastian@formenos.ai">sebastian@formenos.ai</a></p>
-    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

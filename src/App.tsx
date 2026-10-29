@@ -2,8 +2,9 @@ import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import './theme.css'
+import { pageMetadata, type PageId, getPageFromPath, updateMetadata } from './seo'
 
-type PageId = 'home' | 'strategy' | 'research' | 'company'
+
 
 // The Monthly Returns / fund-facts sections this once gated no longer exist in this file;
 // all that remains behind the flag are the nav and footer links that pointed at them.
@@ -37,10 +38,10 @@ const investors: Array<[string, string | null, number?]> = [
 const CONTACT_EMAIL = 'sebastian@formenos.ai'
 
 const navLinks = [
-  { label: 'Fund', href: '#overview' },
-  { label: 'Approach', href: '#/research' },
-  { label: 'Investors', href: '#/strategy' },
-  { label: 'Firm', href: '#/company' },
+  { label: 'Fund', href: '/#overview' },
+  { label: 'Approach', href: '/approach/' },
+  { label: 'Investors', href: '/investors/' },
+  { label: 'Firm', href: '/firm/' },
 ]
 
 const footerColumns = SHOW_FULL_SITE
@@ -146,8 +147,9 @@ const detailPages = {
 }
 
 function getPageFromHash(): PageId {
+  if (typeof window === 'undefined') return 'home'
   const route = window.location.hash.replace('#/', '').replace(/^#/, '').replace(/-approach$/, '')
-  return route === 'research' || route === 'strategy' || route === 'company' ? route : 'home'
+  return route === 'research' || route === 'strategy' || route === 'company' ? route : getPageFromPath(window.location.pathname)
 }
 
 function TitleLines({text}: {text:string}) {
@@ -273,8 +275,8 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
   </>
 }
 
-function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => document.documentElement.dataset.theme === 'light' ? 'light' : 'dark')
+function App({ initialPage }: { initialPage?: PageId }) {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => typeof document !== 'undefined' && document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light')
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -283,7 +285,9 @@ function App() {
     try { localStorage.setItem('formenos-theme', theme) } catch { /* Theme still works when storage is unavailable. */ }
   }, [theme])
   const menuButton = useRef<HTMLButtonElement>(null)
-  const [page, setPage] = useState<PageId>(() => getPageFromHash())
+  const [page, setPage] = useState<PageId>(() => initialPage ?? getPageFromHash())
+
+  useEffect(() => { updateMetadata(page) }, [page])
 
   useEffect(() => {
     function syncPage() {
@@ -309,12 +313,12 @@ function App() {
       <div className="announcement">
         <span className="announcement-copy-desktop">Formenos is building the AI-Native Hedge Fund</span>
         <span className="announcement-copy-mobile">Building the AI-Native Hedge Fund</span>
-        <a href="#/company" aria-label="Learn More about Formenos"><span className="announcement-link-label">Learn More</span><span aria-hidden="true">↗</span></a>
+        <a href="/firm/" aria-label="Learn More about Formenos"><span className="announcement-link-label">Learn More</span><span aria-hidden="true">↗</span></a>
       </div>
 
       <div className="site-shell">
         <header className={`nav ${menuOpen ? 'nav--expanded' : ''}`} onKeyDown={event => {if(event.key === 'Escape' && menuOpen){setMenuOpen(false);menuButton.current?.focus()}}}>
-          <a className="brand" href="#overview" aria-label="Formenos home">
+          <a className="brand" href="/#overview" aria-label="Formenos home">
             <img className="brand-wordmark" src="/formenos-logo.png" alt="Formenos" />
           </a>
 
@@ -322,7 +326,7 @@ function App() {
             <nav id="primary-navigation" className="nav-links" aria-label="Primary navigation" onClick={()=>setMenuOpen(false)}>
               {navLinks.map((menu) => (
                 <div className="nav-item" key={menu.label}>
-                  <a className="nav-trigger" href={menu.href} aria-current={(page === 'home' ? menu.href === '#overview' : menu.href === `#/${page}`) ? 'page' : undefined}>
+                  <a className="nav-trigger" href={menu.href} aria-current={(menu.href === (page === 'home' ? '/#overview' : pageMetadata[page].path)) ? 'page' : undefined}>
                     {menu.label}
                   </a>
                 </div>
@@ -452,7 +456,7 @@ function App() {
       <footer className="site-footer">
         <div className="footer-grid">
           <div className="footer-primary">
-            <a className="brand footer-brand" href="#overview">
+            <a className="brand footer-brand" href="/#overview">
               <img className="brand-wordmark" src="/formenos-logo.png" alt="Formenos" />
             </a>
             <p>
