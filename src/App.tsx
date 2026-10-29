@@ -1,6 +1,7 @@
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import './theme.css'
 
 type PageId = 'home' | 'strategy' | 'research' | 'company'
 
@@ -252,7 +253,7 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
         <span className="hero-subtitle-desktop"><TitleLines text={content.heroSubtitle} /></span>
         <span className="hero-subtitle-mobile"><TitleLines text={mobileHeroSubtitles[page]} /></span>
       </p>
-      <div className="hero-actions"><a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>Get in touch</a><a className="button button-secondary" href={`#${page}-approach`}>Learn More</a></div>
+      <div className="hero-actions"><a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>Contact Us</a><a className="button button-secondary" href={`#${page}-approach`}>Our Work</a></div>
     </section>
     <section className="section split-panel" id={`${page}-approach`}>
       <PageArtwork name={content.image} />
@@ -273,7 +274,14 @@ function DetailPage({ page }: { page: Exclude<PageId, 'home'> }) {
 }
 
 function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => document.documentElement.dataset.theme === 'light' ? 'light' : 'dark')
   const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#fafaf7' : '#000000')
+    try { localStorage.setItem('formenos-theme', theme) } catch { /* Theme still works when storage is unavailable. */ }
+  }, [theme])
   const menuButton = useRef<HTMLButtonElement>(null)
   const [page, setPage] = useState<PageId>(() => getPageFromHash())
 
@@ -323,11 +331,16 @@ function App() {
             </nav>
           ) : null}
 
+          <div className="header-controls">
+          <button className="theme-toggle" type="button" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+            {theme === 'dark' ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg> : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z" /></svg>}
+          </button>
           <button ref={menuButton} className="mobile-nav-button" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} aria-controls="primary-navigation" onClick={()=>setMenuOpen(!menuOpen)}><span className="menu-icon" aria-hidden="true"><i /><i /></span></button>
           <div className="nav-actions">
             <a className="button button-secondary" href={`mailto:${CONTACT_EMAIL}`}>
               Contact
             </a>
+          </div>
           </div>
 
         </header>
@@ -351,10 +364,10 @@ function App() {
           </p>
           <div className="hero-actions">
             <a className="button button-dark" href={`mailto:${CONTACT_EMAIL}`}>
-              Get in touch
+              Contact Us
             </a>
             <a className="button button-secondary" href="#how">
-              How we work
+              Our Work
             </a>
           </div>
 

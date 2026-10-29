@@ -1,0 +1,63 @@
+:root { color-scheme: dark; }
+.header-controls { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #a8a9a2;
+  cursor: pointer;
+}
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle:hover { color: #fff; }
+.theme-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+:root[data-theme='light'] {
+  color-scheme: light;
+  --art-paper: #fafaf7;
+  --bg: #fafaf7;
+  --text: #62635e;
+  --text-h: #1e201c;
+}
+[data-theme='light'] .app-shell {
+  --paper: #fafaf7;
+  --ink: #1e201c;
+  --muted-ink: #62635e;
+  --line: #dcded5;
+}
+[data-theme='light'] .brand-wordmark,
+[data-theme='light'] .logo-cell img {
+  filter: grayscale(1);
+  mix-blend-mode: multiply;
+}
+[data-theme='light'] .nav-trigger,
+[data-theme='light'] .nav-links { color: #4c4e47; }
+[data-theme='light'] .nav-item:hover .nav-trigger,
+[data-theme='light'] .nav-trigger:hover { color: #171914; background: #eeefe8; }
+[data-theme='light'] .button-dark { background: #22251f; border-color: #22251f; color: #fff; }
+[data-theme='light'] .button-dark:hover { background: #3c4037; }
+[data-theme='light'] .button-secondary { background: #eeefe8; border-color: #dcded5; color: #30332b; }
+[data-theme='light'] .button-secondary:hover { background: #e1e3d9; }
+[data-theme='light'] .theme-toggle { color: #72756a; }
+[data-theme='light'] .theme-toggle:hover { color: #171914; }
+[data-theme='light'] .site-footer { background: #fafaf7; color: #30332b; }
+[data-theme='light'] .site-footer p,
+[data-theme='light'] .site-footer a,
+[data-theme='light'] .footer-bottom,
+[data-theme='light'] .footer-bottom div span { color: #62635e; }
+[data-theme='light'] .site-footer a:hover { color: #1e201c; }
+[data-theme='light'] .mobile-artwork { background: #eeefe8; }
+@media (max-width: 899px) {
+  .header-controls { gap: 4px; }
+  .theme-toggle { width: 44px; height: 44px; }
+  [data-theme='light'] .mobile-nav-button { color: #30332b; }
+  [data-theme='light'] .nav > .nav-links { background: #fafaf7; border-color: #dcded5; box-shadow: 0 18px 24px #0000000d; }
+  [data-theme='light'] .nav-links .nav-trigger { border-color: #dcded5; }
+  [data-theme='light'] .nav-links .mobile-contact,
+  [data-theme='light'] .nav-trigger[aria-current=page]::after { color: #62635e; }
+}

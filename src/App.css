@@ -2629,3 +2629,87 @@ body,.site-shell,.nav,.nav::before {background:var(--art-paper);}
   .mobile-artwork img {display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:contain;}
   .split-panel > .logo-wall {order:1;border-top:1px solid var(--line);border-bottom:0;}
 }
+
+/* Frame the supporting sections; keep the hero content together and undivided. */
+.app-shell > .split-panel {
+  width: calc(100% - 2 * var(--shell-gutter));
+  max-width: none;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+}
+.app-shell > .split-panel:last-child { border-bottom: 1px solid var(--line); }
+.split-panel { --pad-inner: 32px; --pad-y: 32px; }
+.split-panel > * {
+  --pad-l: var(--pad-inner);
+  --pad-r: var(--pad-inner);
+  min-width: 0;
+}
+.panel-head h2 { margin: 0; }
+.panel-head, .panel-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.panel-row p { max-width: 48ch; margin-top: 10px; }
+@media (min-width: 900px) {
+  .split-panel .panel-rows {
+    display: grid;
+    grid-template-rows: repeat(3, minmax(152px, 1fr));
+  }
+  .panel-visual.page-artwork { min-height: 456px; }
+  .logo-cell { min-height: 152px; }
+}
+@media (max-width: 899px) {
+  .split-panel { --pad-inner: 24px; --pad-y: 24px; }
+  .split-panel .panel-head { padding-block: 28px; }
+  .panel-head .two-line-title { margin: 0; }
+  .mobile-artwork { margin-bottom: -24px; }
+}
+
+/* Continue the section frame upward without dividing the hero into cells. */
+.site-shell { --frame-line: #41413e; }
+:root[data-theme='light'] .site-shell { --frame-line: #dcded5; }
+.site-shell > .nav::after,
+.app-shell > .hero::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline: var(--shell-gutter);
+  border-inline: 1px solid var(--frame-line);
+  pointer-events: none;
+}
+.app-shell > .hero { position: relative; }
+.site-shell > .nav,
+.app-shell > .hero {
+  padding-inline: calc(var(--shell-gutter) + 32px);
+}
+@media (max-width: 899px) {
+  .site-shell > .nav,
+  .app-shell > .hero { padding-inline: calc(var(--shell-gutter) + 24px); }
+  .site-shell > .nav { gap: 8px; }
+  .nav .brand-wordmark { height: 20px; }
+}
+
+/* Desktop: keep the introduction proportionate to the content grid below. */
+@media (min-width: 900px) {
+  .app-shell > .hero {
+    min-height: clamp(420px, 55svh, 520px);
+    padding-block: 72px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 3.35vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.045em;
+  }
+  .hero .hero-sub {
+    margin-top: 24px;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .hero .hero-actions { margin-top: 28px; }
+  .site-footer {
+    padding-inline: calc(var(--shell-inset) + var(--shell-gutter) + 32px);
+    padding-top: 48px;
+  }
+  .footer-bottom { margin-top: 40px; }
+}
