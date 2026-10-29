@@ -2713,3 +2713,6 @@ body,.site-shell,.nav,.nav::before {background:var(--art-paper);}
   }
   .footer-bottom { margin-top: 40px; }
 }
+
+/* Close the navigation row along the same inset frame as the page. */
+.site-shell > .nav::after { border-bottom: 1px solid var(--frame-line); }
